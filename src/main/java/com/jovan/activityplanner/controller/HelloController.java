@@ -1,4 +1,4 @@
-package com.jovan.activityplanner;
+package com.jovan.activityplanner.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
