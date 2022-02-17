@@ -1,33 +1,56 @@
 package com.jovan.activityplanner.model;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class Activity {
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private ObjectProperty<LocalDateTime> startTime;
+    private ObjectProperty<LocalDateTime> endTime;
 
-    private String title;
-    private String description;
+    private SimpleStringProperty title;
+    private SimpleStringProperty description;
 
     public Activity(LocalDateTime startTime, LocalDateTime endTime, String title, String description) {
         if (startTime.isAfter(endTime)) {
             throw new IllegalArgumentException("Cannot create activity. Start time must be before end time.");
         }
 
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.title = title;
-        this.description = description;
+        this.startTime = new SimpleObjectProperty<>();
+        this.startTime.set(startTime);
+
+        this.endTime = new SimpleObjectProperty<>();
+        this.endTime.set(endTime);
+
+        this.title.set(title.isBlank() ? "(No title)" : title);
+        this.description.set(description);
     }
 
-    public LocalDateTime getStartTime() {
+    public ObjectProperty<LocalDateTime> startTimeProperty() {
         return startTime;
     }
 
+    public ObjectProperty<LocalDateTime> endTimeProperty() {
+        return endTime;
+    }
+
+    public SimpleStringProperty titleProperty() {
+        return title;
+    }
+
+    public SimpleStringProperty descriptionProperty() {
+        return description;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime.get();
+    }
+
     public boolean setStartTime(LocalDateTime startTime) {
-        if (startTime.isBefore(this.endTime)) {
-            this.startTime = startTime;
+        if (startTime.isBefore(this.endTime.get())) {
+            this.startTime.set(startTime);
             return true;
         }
 
@@ -35,12 +58,12 @@ public class Activity {
     }
 
     public LocalDateTime getEndTime() {
-        return endTime;
+        return endTime.get();
     }
 
     public boolean setEndTime(LocalDateTime endTime) {
-        if (endTime.isAfter(this.startTime)) {
-            this.endTime = endTime;
+        if (endTime.isAfter(this.startTime.get())) {
+            this.endTime.set(endTime);
             return true;
         }
 
@@ -49,8 +72,8 @@ public class Activity {
 
     public boolean setTime(LocalDateTime startTime, LocalDateTime endTime) {
         if (startTime.isBefore(endTime)) {
-            this.startTime = startTime;
-            this.endTime = endTime;
+            this.startTime.set(startTime);
+            this.endTime.set(endTime);
             return true;
         }
 
@@ -58,28 +81,28 @@ public class Activity {
     }
 
     public String getTitle() {
-        return title;
+        return title.get();
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title.set(title);
     }
 
     public String getDescription() {
-        return description;
+        return description.get();
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description.set(description);
     }
 
     @Override
     public String toString() {
         return "Activity{" +
-                "startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                "startTime=" + startTime.get() +
+                ", endTime=" + endTime.get() +
+                ", title='" + title.get() + '\'' +
+                ", description='" + description.get() + '\'' +
                 '}';
     }
 }

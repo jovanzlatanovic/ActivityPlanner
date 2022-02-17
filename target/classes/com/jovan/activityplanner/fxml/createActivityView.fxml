@@ -16,21 +16,21 @@
             <Label text="Start date" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <DatePicker />
-                  <TextArea prefHeight="200.0" prefWidth="200.0" promptText="HH:MM" />
+                  <DatePicker fx:id="dateStart" />
+                  <TextField fx:id="timeStartText" promptText="HH:mm" />
                </children>
             </HBox>
             <Label text="End date" />
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox fx:id="date_end" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <DatePicker />
-                  <TextArea prefHeight="200.0" prefWidth="200.0" promptText="HH:MM" />
+                  <DatePicker fx:id="dateEnd" />
+                  <TextField fx:id="timeEndText" promptText="HH:mm" />
                </children>
             </HBox>
             <Label text="Title" />
-            <TextField />
+            <TextField fx:id="titleText" />
             <Label text="Description" />
-            <TextArea prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="descriptionText" prefHeight="200.0" prefWidth="200.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
                <children>
                   <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonClick" text="Create" />

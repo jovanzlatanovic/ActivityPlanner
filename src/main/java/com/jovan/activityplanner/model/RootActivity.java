@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class RootActivity extends Activity {
-    //TODO: Consider using an id based array system;
     private ArrayList<Activity> subActivities;
 
     public RootActivity(LocalDateTime start, LocalDateTime end, String title, String description) {
