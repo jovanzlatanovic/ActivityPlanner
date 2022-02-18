@@ -7,50 +7,31 @@ import javafx.beans.property.SimpleStringProperty;
 import java.time.LocalDateTime;
 
 public class Activity {
-    private ObjectProperty<LocalDateTime> startTime;
-    private ObjectProperty<LocalDateTime> endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    private SimpleStringProperty title;
-    private SimpleStringProperty description;
+    private String title;
+    private String description;
 
     public Activity(LocalDateTime startTime, LocalDateTime endTime, String title, String description) {
         if (startTime.isAfter(endTime)) {
             throw new IllegalArgumentException("Cannot create activity. Start time must be before end time.");
         }
 
-        this.startTime = new SimpleObjectProperty<>();
-        this.startTime.set(startTime);
+        this.startTime = startTime;
+        this.endTime = endTime;
 
-        this.endTime = new SimpleObjectProperty<>();
-        this.endTime.set(endTime);
-
-        this.title.set(title.isBlank() ? "(No title)" : title);
-        this.description.set(description);
-    }
-
-    public ObjectProperty<LocalDateTime> startTimeProperty() {
-        return startTime;
-    }
-
-    public ObjectProperty<LocalDateTime> endTimeProperty() {
-        return endTime;
-    }
-
-    public SimpleStringProperty titleProperty() {
-        return title;
-    }
-
-    public SimpleStringProperty descriptionProperty() {
-        return description;
+        this.title = title.isBlank() ? "(No title)" : title;
+        this.description = description;
     }
 
     public LocalDateTime getStartTime() {
-        return startTime.get();
+        return startTime;
     }
 
     public boolean setStartTime(LocalDateTime startTime) {
-        if (startTime.isBefore(this.endTime.get())) {
-            this.startTime.set(startTime);
+        if (startTime.isBefore(this.endTime)) {
+            this.startTime = startTime;
             return true;
         }
 
@@ -58,22 +39,24 @@ public class Activity {
     }
 
     public LocalDateTime getEndTime() {
-        return endTime.get();
+        return endTime;
     }
 
     public boolean setEndTime(LocalDateTime endTime) {
-        if (endTime.isAfter(this.startTime.get())) {
-            this.endTime.set(endTime);
+        if (endTime.isAfter(this.startTime)) {
+            this.endTime = endTime;
             return true;
         }
 
         return false;
     }
 
+    //todo srediti ovo da ne koristi properties nego POJO plain old java opjects
+
     public boolean setTime(LocalDateTime startTime, LocalDateTime endTime) {
         if (startTime.isBefore(endTime)) {
-            this.startTime.set(startTime);
-            this.endTime.set(endTime);
+            this.startTime = startTime;
+            this.endTime = endTime;
             return true;
         }
 
@@ -81,28 +64,28 @@ public class Activity {
     }
 
     public String getTitle() {
-        return title.get();
+        return title;
     }
 
     public void setTitle(String title) {
-        this.title.set(title);
+        this.title = title;
     }
 
     public String getDescription() {
-        return description.get();
+        return description;
     }
 
     public void setDescription(String description) {
-        this.description.set(description);
+        this.description = description;
     }
 
     @Override
     public String toString() {
         return "Activity{" +
-                "startTime=" + startTime.get() +
-                ", endTime=" + endTime.get() +
-                ", title='" + title.get() + '\'' +
-                ", description='" + description.get() + '\'' +
+                "startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

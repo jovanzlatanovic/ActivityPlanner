@@ -25,31 +25,17 @@ public class CreateActivityController {
 
     private ActivityModel model;
 
-    public void initModel(ActivityModel model) {
-        if (this.model != null) {
-            throw new IllegalStateException("Model can only be initialized once");
-        }
-
-        this.model = model;
-
-        model.currentActivityProperty().addListener((obs, oldActivity, newActivity) -> {
-            if (oldActivity != null) {
-                dateStart.converterProperty().unbindBidirectional(oldActivity.startTimeProperty().cobn);
-                //todo: ovaj tutorial, https://stackoverflow.com/questions/32342864/applying-mvc-with-javafx/32343342#32343342
-                // treci section koda tu si stigao
-            }
-        });
+    public void initialize() {
+        this.model = ActivityModel.getInstance();
     }
 
-    @FXML private void handleCreation(Event event) {
+    private void handleCreation() {
         try {
             LocalDateTime newTimeStart = LocalDateTime.of(dateStart.getValue(), LocalTime.parse(timeStartText.getText()));
             LocalDateTime newTimeEnd = LocalDateTime.of(dateEnd.getValue(), LocalTime.parse(timeEndText.getText()));
 
             RootActivity newActivity = new RootActivity(newTimeStart, newTimeEnd, titleText.getText(), descriptionText.getText());
-
-            //created new activity, must update model System.out.println(newActivity);
-            closeDialog();
+            this.model.addActivity(newActivity);
         } catch (DateTimeParseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Time entered is invalid");
@@ -61,13 +47,13 @@ public class CreateActivityController {
             alert.setContentText(String.format(e.getLocalizedMessage()));
             alert.show();
         }
-
-        event.consume();
     }
 
     @FXML
-    public void onCreateButtonClick() {
-
+    public void onCreateButtonClick(Event event) {
+        handleCreation();
+        event.consume();
+        closeDialog();
     }
 
     @FXML

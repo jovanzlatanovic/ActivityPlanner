@@ -4,6 +4,7 @@ import com.jovan.activityplanner.model.Activity;
 import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.RootActivity;
 import com.jovan.activityplanner.view.CreateActivityDialog;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,24 +19,14 @@ public class MainController {
     @FXML private ListView<Activity> activityListView;
     private ActivityModel model;
 
-    public void initModel(ActivityModel model) {
-        if (this.model != null) {
-            // Ensure model is only initialized once
-            throw new IllegalStateException("Model can only be initialized once");
-        }
-
-        this.model = model;
+    public void initialize() {
+        // get model
+        this.model = ActivityModel.getInstance();
         activityListView.setItems(model.getActivityList());
-        activityListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            model.setCurrentActivity(newSelection);
-        });
 
-        model.currentActivityProperty().addListener((obs, oldActivity, newActivity) -> {
-            if (newActivity == null) {
-                activityListView.getSelectionModel().clearSelection();
-            } else {
-                activityListView.getSelectionModel().select(newActivity);
-            }
+        // for later maybe, observable is linked inside of initmodel method
+        model.getActivityList().addListener((ListChangeListener<Activity>) change -> {
+
         });
     }
 
