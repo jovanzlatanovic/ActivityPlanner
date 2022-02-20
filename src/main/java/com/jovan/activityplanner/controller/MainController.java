@@ -2,13 +2,13 @@ package com.jovan.activityplanner.controller;
 
 import com.jovan.activityplanner.model.Activity;
 import com.jovan.activityplanner.model.ActivityModel;
-import com.jovan.activityplanner.model.RootActivity;
+import com.jovan.activityplanner.model.ApplicationModel;
+import com.jovan.activityplanner.model.command.CreateCommand;
+import com.jovan.activityplanner.model.command.UndoCommand;
 import com.jovan.activityplanner.view.CreateActivityDialog;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 
 import java.io.IOException;
@@ -17,17 +17,25 @@ public class MainController {
 
     //TODO: Switch activity for root activity, check activity model comment
     @FXML private ListView<Activity> activityListView;
+    private ApplicationModel appModel;
     private ActivityModel model;
 
     public void initialize() {
-        // get model
+        // Get activity and app models
+        this.appModel = ApplicationModel.getInstance();
         this.model = ActivityModel.getInstance();
         activityListView.setItems(model.getActivityList());
 
-        // for later maybe, observable is linked inside of initmodel method
-        model.getActivityList().addListener((ListChangeListener<Activity>) change -> {
+        // Setup commands
+        //CreateCommand createCommand = new CreateCommand(appModel, model);
+        //UndoCommand undoCommand = new UndoCommand(appModel, model);
+        //todo: link commands to actions
+    }
 
-        });
+    @FXML
+    public void onUndoButtonClick(ActionEvent event) {
+        UndoCommand u = new UndoCommand(appModel, model);
+        u.execute();
     }
 
     @FXML

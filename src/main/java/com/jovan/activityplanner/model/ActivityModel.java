@@ -5,6 +5,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class ActivityModel {
     //TODO: replace plain activity with root activity to implement sub activity functionality
 
@@ -32,6 +35,12 @@ public class ActivityModel {
 
     public void deleteActivity(int index) {
         activityList.remove(index);
+    }
+
+    public void updateList(ArrayList<Activity> a) {
+        // This may look ugly but is necessary to preserve the finality of activityList, might refactor later
+        activityList.clear();
+        activityList.addAll(a);
     }
 
     //private final ObjectProperty<Activity> currentActivity = new SimpleObjectProperty<>(null);

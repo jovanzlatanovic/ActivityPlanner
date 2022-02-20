@@ -1,7 +1,10 @@
 package com.jovan.activityplanner.controller;
 
 import com.jovan.activityplanner.model.ActivityModel;
+import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.RootActivity;
+import com.jovan.activityplanner.model.command.CreateCommand;
+import com.jovan.activityplanner.model.command.UndoCommand;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,6 +16,7 @@ import java.time.format.DateTimeParseException;
 
 public class CreateActivityController {
 
+    @FXML private Button undoButton;
     @FXML private Button createButton;
     @FXML private Button cancelButton;
 
@@ -24,9 +28,11 @@ public class CreateActivityController {
     @FXML private TextArea descriptionText;
 
     private ActivityModel model;
+    private ApplicationModel appModel;
 
     public void initialize() {
         this.model = ActivityModel.getInstance();
+        this.appModel = ApplicationModel.getInstance();
     }
 
     private void handleCreation() {
@@ -35,7 +41,10 @@ public class CreateActivityController {
             LocalDateTime newTimeEnd = LocalDateTime.of(dateEnd.getValue(), LocalTime.parse(timeEndText.getText()));
 
             RootActivity newActivity = new RootActivity(newTimeStart, newTimeEnd, titleText.getText(), descriptionText.getText());
-            this.model.addActivity(newActivity);
+
+            CreateCommand c = new CreateCommand(appModel, model);
+            c.setActivityToCreate(newActivity);
+            this.appModel.executeCommand(c);
         } catch (DateTimeParseException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Time entered is invalid");
