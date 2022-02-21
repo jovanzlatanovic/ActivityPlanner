@@ -24,7 +24,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="TOP_LEFT">
          <children>
-            <ListView fx:id="activityListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <ListView fx:id="activityListView" onKeyPressed="#onKeyPressedActivityListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
          </children></VBox>
    </center>
 </BorderPane>

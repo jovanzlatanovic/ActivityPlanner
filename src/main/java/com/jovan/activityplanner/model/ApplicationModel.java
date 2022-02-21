@@ -27,7 +27,7 @@ public class ApplicationModel {
     public void undo() {
         // LinkedList<T>.pop() throws an exception when the list is empty
         // The list empty check is performed inside of the CommandHistory.pop() definition
-        Command command = history.pop();
+        Command command = history.undo();
         if (command != null) {
             command.undo();
         }

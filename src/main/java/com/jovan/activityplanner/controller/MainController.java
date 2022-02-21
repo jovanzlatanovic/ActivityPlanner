@@ -4,7 +4,7 @@ import com.jovan.activityplanner.Main;
 import com.jovan.activityplanner.model.Activity;
 import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
-import com.jovan.activityplanner.model.RootActivity;
+import com.jovan.activityplanner.model.command.DeleteCommand;
 import com.jovan.activityplanner.model.command.UndoCommand;
 import com.jovan.activityplanner.view.CreateActivityDialog;
 import javafx.application.Platform;
@@ -17,7 +17,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -32,7 +34,9 @@ public class MainController {
     @FXML private ListView<Activity> activityListView;
     private ApplicationModel appModel;
     private ActivityModel model;
+
     private UndoCommand undoCommand;
+    //todo private RedoCommand redoCommand;
 
     public void initialize() {
         // Get activity and app models
@@ -69,7 +73,7 @@ public class MainController {
             });
 
             deleteMenuItem.setOnAction(e -> {
-                model.deleteActivity(cell.getIndex());
+                handleDeleteActivity(cell.getIndex());
             });
 
             cell.textProperty().bind(cell.itemProperty().asString());
@@ -97,7 +101,7 @@ public class MainController {
         });
         newMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 
-        SeparatorMenuItem seperator = new SeparatorMenuItem();
+        SeparatorMenuItem separator = new SeparatorMenuItem();
 
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(e -> {
@@ -109,6 +113,13 @@ public class MainController {
         undoMenuItem.setOnAction(e -> {
             undoCommand.execute();
         });
+
+        MenuItem redoMenuItem = new MenuItem("Redo");
+        redoMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
+        redoMenuItem.setOnAction(e -> {
+            //todo redoCommand.execute();
+        });
+        redoMenuItem.setDisable(true);
 
         MenuItem helpMenuItem = new MenuItem("Help");
         helpMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.F1));
@@ -132,8 +143,8 @@ public class MainController {
             aboutDialog.showAndWait();
         });
 
-        fileMenu.getItems().addAll(newMenuItem, seperator, exitMenuItem);
-        editMenu.getItems().add(undoMenuItem);
+        fileMenu.getItems().addAll(newMenuItem, separator, exitMenuItem);
+        editMenu.getItems().addAll(undoMenuItem, redoMenuItem);
         helpMenu.getItems().addAll(helpMenuItem, aboutMenuItem);
         menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu);
     }
@@ -141,6 +152,16 @@ public class MainController {
     @FXML
     public void onNewActivityButtonClick(ActionEvent event) {
         handleNewActivityDialog(event);
+    }
+
+    @FXML
+    public void onKeyPressedActivityListView(KeyEvent key) {
+        if (key.getCode().equals(KeyCode.DELETE)) {
+            int index = activityListView.getSelectionModel().getSelectedIndex();
+            if (index > -1) {
+                handleDeleteActivity(index);
+            }
+        }
     }
 
     private void openBrowser(String url) {
@@ -152,6 +173,12 @@ public class MainController {
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleDeleteActivity(int indexToDelete) {
+        DeleteCommand c = new DeleteCommand(appModel, model);
+        c.setActivityIndxed(indexToDelete);
+        this.appModel.executeCommand(c);
     }
 
     private void handleNewActivityDialog(ActionEvent event) {

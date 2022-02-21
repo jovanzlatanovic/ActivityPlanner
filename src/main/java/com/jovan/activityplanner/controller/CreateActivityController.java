@@ -5,7 +5,6 @@ import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.RootActivity;
 import com.jovan.activityplanner.model.command.CreateCommand;
-import com.jovan.activityplanner.model.command.UndoCommand;
 import com.jovan.activityplanner.model.command.UpdateCommand;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -38,7 +37,6 @@ public class CreateActivityController {
     private Activity activityToEdit;
 
     public void initialize() {
-        System.out.println("init");
         this.model = ActivityModel.getInstance();
         this.appModel = ApplicationModel.getInstance();
 
