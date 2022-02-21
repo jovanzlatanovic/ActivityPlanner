@@ -3,13 +3,19 @@ package com.jovan.activityplanner.model;
 import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.command.CommandHistory;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
+import com.jovan.activityplanner.util.LoggerSingleton;
+
+import java.util.logging.Logger;
 
 public class ApplicationModel {
+    private Logger logger = LoggerSingleton.getInstance();
+
     private static ApplicationModel instance = null;
     private final CommandHistory history;
 
     private ApplicationModel() {
         history = new CommandHistory();
+        logger.info("ApplicationModel singleton created");
     }
 
     public static ApplicationModel getInstance() {
@@ -23,6 +29,7 @@ public class ApplicationModel {
         if (c.execute()) {
             history.push(c);
         }
+        logger.info("Executed command: " + c.getClass().toString());
     }
 
     public void undo() {

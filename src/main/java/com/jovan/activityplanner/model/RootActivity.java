@@ -23,8 +23,9 @@ public class RootActivity extends Activity {
 
     @Override
     public String toString() {
+        // Todo: bugs out when subactivities is null so subactivities are not shown
         return "RootActivity{" +
-                "numberOfSubActivities=" + subActivities.size() +
+                "numberOfSubActivities=no information" +
                 ", startTime=" + this.getStartTime() +
                 ", endTime=" + this.getEndTime() +
                 ", title='" + this.getTitle() + '\'' +

@@ -1,12 +1,16 @@
 package com.jovan.activityplanner.model;
 
+import com.jovan.activityplanner.util.LoggerSingleton;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
 public class Activity {
+    private Logger logger = LoggerSingleton.getInstance();
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
@@ -23,6 +27,8 @@ public class Activity {
 
         this.title = title.isBlank() ? "(No title)" : title;
         this.description = description;
+
+        logger.info("New activity object instantiated " + this.toString());
     }
 
     public LocalDateTime getStartTime() {

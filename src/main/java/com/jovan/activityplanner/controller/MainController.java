@@ -19,17 +19,13 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Properties;
 
 public class MainController {
 
@@ -116,11 +112,11 @@ public class MainController {
     }
 
     public void executeUndo() {
-        undoCommand.execute();
+        appModel.executeCommand(undoCommand);
     }
 
     public void executeRedo() {
-        redoCommand.execute();
+        appModel.executeCommand(redoCommand);
     }
 
     public void handleOpenBrowser(String url) {

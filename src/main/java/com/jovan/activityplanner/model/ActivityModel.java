@@ -1,5 +1,6 @@
 package com.jovan.activityplanner.model;
 
+import com.jovan.activityplanner.util.LoggerSingleton;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -7,20 +8,25 @@ import javafx.collections.ObservableList;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ActivityModel {
     //TODO: replace plain activity with root activity to implement sub activity functionality
+    private Logger logger = LoggerSingleton.getInstance();
 
     private static ActivityModel singleton_instance = null;
     private final ObservableList<Activity> activityList;
 
     private ActivityModel() {
         activityList = FXCollections.observableArrayList();
+        logger.info("ActivityModel singleton created");
     }
 
     public static ActivityModel getInstance() {
-        if (singleton_instance == null)
+        if (singleton_instance == null) {
             singleton_instance = new ActivityModel();
+        }
 
         return singleton_instance;
     }
