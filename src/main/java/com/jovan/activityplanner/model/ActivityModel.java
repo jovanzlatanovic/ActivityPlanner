@@ -29,6 +29,14 @@ public class ActivityModel {
         return activityList;
     }
 
+    public Activity getActivity(int index) {
+        return activityList.get(index);
+    }
+
+    public void updateActivity(int index, Activity newActivity) {
+        activityList.set(index, newActivity);
+    }
+
     public void addActivity(Activity a) {
         activityList.add(a);
     }
