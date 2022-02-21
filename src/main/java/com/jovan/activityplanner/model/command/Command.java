@@ -26,6 +26,10 @@ public abstract class Command {
         this.model.updateList(this.backup);
     }
 
+    public void redo() {
+        this.execute();
+    }
+
     // Return true if command should be added to history, false otherwise
     public abstract boolean execute();
 }

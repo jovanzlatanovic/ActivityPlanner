@@ -5,6 +5,7 @@ import com.jovan.activityplanner.model.Activity;
 import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.command.DeleteCommand;
+import com.jovan.activityplanner.model.command.RedoCommand;
 import com.jovan.activityplanner.model.command.UndoCommand;
 import com.jovan.activityplanner.view.CreateActivityDialog;
 import javafx.application.Platform;
@@ -36,7 +37,7 @@ public class MainController {
     private ActivityModel model;
 
     private UndoCommand undoCommand;
-    //todo private RedoCommand redoCommand;
+    private RedoCommand redoCommand;
 
     public void initialize() {
         // Get activity and app models
@@ -46,6 +47,7 @@ public class MainController {
 
         // Setup commands
         undoCommand = new UndoCommand(appModel, model);
+        redoCommand = new RedoCommand(appModel, model);
 
         // Menubar initialization
         initializeMenubar();
@@ -117,9 +119,9 @@ public class MainController {
         MenuItem redoMenuItem = new MenuItem("Redo");
         redoMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
         redoMenuItem.setOnAction(e -> {
-            //todo redoCommand.execute();
+            redoCommand.execute();
         });
-        redoMenuItem.setDisable(true);
+        //redoMenuItem.setDisable(true);
 
         MenuItem helpMenuItem = new MenuItem("Help");
         helpMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.F1));

@@ -32,4 +32,11 @@ public class ApplicationModel {
             command.undo();
         }
     }
+
+    public void redo() {
+        Command command = history.redo();
+        if (command != null) {
+            command.redo();
+        }
+    }
 }
