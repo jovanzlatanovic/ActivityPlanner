@@ -31,5 +31,6 @@ public abstract class Command {
     }
 
     // Return true if command should be added to history, false otherwise
+    // To implement listener, execute() implementation must include onExecute(this) call in itself
     public abstract boolean execute();
 }

@@ -4,10 +4,13 @@ import com.jovan.activityplanner.Main;
 import com.jovan.activityplanner.model.Activity;
 import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
+import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.command.DeleteCommand;
 import com.jovan.activityplanner.model.command.RedoCommand;
 import com.jovan.activityplanner.model.command.UndoCommand;
+import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import com.jovan.activityplanner.view.CreateActivityDialog;
+import com.jovan.activityplanner.view.MainMenuBar;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +22,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +33,7 @@ import java.util.Properties;
 
 public class MainController {
 
+    @FXML private BorderPane rootBorderPane;
     @FXML private MenuBar menuBar;
 
     //TODO: Switch activity for root activity, check activity model comment
@@ -49,8 +54,11 @@ public class MainController {
         undoCommand = new UndoCommand(appModel, model);
         redoCommand = new RedoCommand(appModel, model);
 
-        // Menubar initialization
-        initializeMenubar();
+        // Menu bar initialization
+        menuBar = new MainMenuBar(this);
+        appModel.addHistoryListener((CommandHistoryListener) menuBar);
+        rootBorderPane.setTop(menuBar);
+
         // Context menu initialization
         initializeContextMenu();
     }
@@ -92,65 +100,6 @@ public class MainController {
         });
     }
 
-    private void initializeMenubar() {
-        Menu fileMenu = new Menu("File");
-        Menu editMenu = new Menu("Edit");
-        Menu helpMenu = new Menu("Help");
-
-        MenuItem newMenuItem = new MenuItem("New activity");
-        newMenuItem.setOnAction(e -> {
-            handleNewActivityDialog(e);
-        });
-        newMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
-
-        SeparatorMenuItem separator = new SeparatorMenuItem();
-
-        MenuItem exitMenuItem = new MenuItem("Exit");
-        exitMenuItem.setOnAction(e -> {
-            Platform.exit();
-        });
-
-        MenuItem undoMenuItem = new MenuItem("Undo");
-        undoMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
-        undoMenuItem.setOnAction(e -> {
-            undoCommand.execute();
-        });
-
-        MenuItem redoMenuItem = new MenuItem("Redo");
-        redoMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
-        redoMenuItem.setOnAction(e -> {
-            redoCommand.execute();
-        });
-        //redoMenuItem.setDisable(true);
-
-        MenuItem helpMenuItem = new MenuItem("Help");
-        helpMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.F1));
-        helpMenuItem.setOnAction(e -> {
-            openBrowser("https://github.com/jovanzlatanovic/ActivityPlanner/wiki");
-        });
-
-        MenuItem aboutMenuItem = new MenuItem("About");
-        aboutMenuItem.setOnAction(e -> {
-            Properties properties = new Properties();
-            try {
-                properties.load(Main.class.getResourceAsStream("/project.properties"));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            Alert aboutDialog = new Alert(Alert.AlertType.INFORMATION);
-            aboutDialog.setTitle("About Activity Planner");
-            aboutDialog.setHeaderText(String.format("Activity Planner %s", properties.getProperty("version")));
-            aboutDialog.setContentText(String.format("Running on Java version: %s\nBuilt using JavaFX 17.0.1\n\nMade by Jovan Zlatanović", System.getProperty("java.version")));
-            aboutDialog.showAndWait();
-        });
-
-        fileMenu.getItems().addAll(newMenuItem, separator, exitMenuItem);
-        editMenu.getItems().addAll(undoMenuItem, redoMenuItem);
-        helpMenu.getItems().addAll(helpMenuItem, aboutMenuItem);
-        menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu);
-    }
-
     @FXML
     public void onNewActivityButtonClick(ActionEvent event) {
         handleNewActivityDialog(event);
@@ -166,7 +115,15 @@ public class MainController {
         }
     }
 
-    private void openBrowser(String url) {
+    public void executeUndo() {
+        undoCommand.execute();
+    }
+
+    public void executeRedo() {
+        redoCommand.execute();
+    }
+
+    public void handleOpenBrowser(String url) {
         Desktop desktop = java.awt.Desktop.getDesktop();
         try {
             //specify the protocol along with the URL
@@ -183,7 +140,7 @@ public class MainController {
         this.appModel.executeCommand(c);
     }
 
-    private void handleNewActivityDialog(ActionEvent event) {
+    public void handleNewActivityDialog(ActionEvent event) {
         //Node parentNode = (Node) event.getSource();
         CreateActivityDialog dialog = null;
         try {

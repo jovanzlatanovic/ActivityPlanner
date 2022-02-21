@@ -2,6 +2,7 @@ package com.jovan.activityplanner.model;
 
 import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.command.CommandHistory;
+import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 
 public class ApplicationModel {
     private static ApplicationModel instance = null;
@@ -38,5 +39,9 @@ public class ApplicationModel {
         if (command != null) {
             command.redo();
         }
+    }
+
+    public void addHistoryListener(CommandHistoryListener listener) {
+        history.addListener(listener);
     }
 }
