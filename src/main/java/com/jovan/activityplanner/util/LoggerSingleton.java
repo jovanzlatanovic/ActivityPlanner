@@ -7,6 +7,7 @@ public class LoggerSingleton {
 
     private LoggerSingleton() {
         LOGGER = Logger.getLogger( LoggerSingleton.class.getName() );
+        LOGGER.info("Logger initialized and ready for action!");
     }
 
     public static Logger getInstance() {
