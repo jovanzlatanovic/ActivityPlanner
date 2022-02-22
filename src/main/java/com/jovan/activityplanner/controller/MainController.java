@@ -21,12 +21,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,9 +38,10 @@ import java.util.logging.Logger;
 public class MainController {
 
     @FXML private BorderPane rootBorderPane;
+    @FXML private HBox centerContainer;
     @FXML private MenuBar menuBar;
 
-    Logger logger = LoggerSingleton.getInstance();
+    private Logger logger = LoggerSingleton.getInstance();
 
     //TODO: Switch activity for root activity, check activity model comment
     //@FXML private ListView<Activity> activityListView;
@@ -51,8 +54,9 @@ public class MainController {
     public void initialize() {
         logger.info("Initializing main controller");
         // Get activity and app models
-        this.appModel = ApplicationModel.getInstance();
         this.model = ActivityModel.getInstance();
+        this.appModel = ApplicationModel.getInstance();
+
         //activityListView.setItems(model.getActivityList());
 
         // Setup commands
@@ -60,62 +64,30 @@ public class MainController {
         redoCommand = new RedoCommand(appModel, model);
 
         // Menu bar initialization
-        menuBar = new MainMenuBar(this);
+        menuBar = new MainMenuBar(this, appModel);
         appModel.addHistoryListener((CommandHistoryListener) menuBar);
         rootBorderPane.setTop(menuBar);
-
-        // Context menu initialization
-        initializeContextMenu();
 
         // Timeline initialization
         logger.info("Loading timeline view");
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/timelineView.fxml"));
         try {
-            Pane timelineView = fxmlLoader.load();
-            rootBorderPane.setCenter(timelineView);
+            ScrollPane timelineView = fxmlLoader.load();
+            rootBorderPane.setCenter(centerContainer);
+            centerContainer.getChildren().add(timelineView);
+
+            //centerContainer.prefWidthProperty().bind(rootBorderPane.widthProperty());
+            //centerContainer.prefHeightProperty().bind(rootBorderPane.heightProperty());
+
+            //timelineView.prefWidthProperty().bind(centerContainer.widthProperty());
+            //timelineView.prefHeightProperty().bind(centerContainer.heightProperty());
+
             logger.info("Timeline view loaded");
         } catch (IOException e) {
             logger.severe("Exception occured while loading timeline view: " + e.toString());
             Platform.exit();
         }
         logger.info("Main controller initialized");
-    }
-
-    private void initializeContextMenu() {
-        // The context menu currently is a temporary solution
-        // since there is no timeline implemented at this time.
-        // In the future this code should be replaced by code for each activity ui cell.
-        // It doesn't really matter it's showing ugly nulls at the moment.
-
-        /*activityListView.setCellFactory(listView -> {
-            ListCell<Activity> cell = new ListCell<>();
-
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem editMenuItem = new MenuItem("Edit");
-            SeparatorMenuItem sep = new SeparatorMenuItem();
-            MenuItem deleteMenuItem = new MenuItem("Delete");
-            contextMenu.getItems().addAll(editMenuItem, sep, deleteMenuItem);
-
-            editMenuItem.setOnAction(e -> {
-                handleEditActivityDialog(e, cell.getIndex());
-            });
-
-            deleteMenuItem.setOnAction(e -> {
-                handleDeleteActivity(cell.getIndex());
-            });
-
-            cell.textProperty().bind(cell.itemProperty().asString());
-
-            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                if (isNowEmpty) {
-                    cell.setContextMenu(null);
-                } else {
-                    cell.setContextMenu(contextMenu);
-                }
-            });
-
-            return cell;
-        });*/
     }
 
     @FXML
@@ -131,14 +103,6 @@ public class MainController {
                 handleDeleteActivity(index);
             }
         }*/
-    }
-
-    public void executeUndo() {
-        appModel.executeCommand(undoCommand);
-    }
-
-    public void executeRedo() {
-        appModel.executeCommand(redoCommand);
     }
 
     public void handleOpenBrowser(String url) {

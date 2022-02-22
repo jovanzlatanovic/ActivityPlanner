@@ -2,6 +2,7 @@ package com.jovan.activityplanner.view;
 
 import com.jovan.activityplanner.Main;
 import com.jovan.activityplanner.controller.MainController;
+import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import javafx.application.Platform;
@@ -15,6 +16,7 @@ import java.util.Properties;
 
 public class MainMenuBar extends MenuBar implements CommandHistoryListener {
     private MainController controller;
+    private ApplicationModel appModel;
 
     private Menu fileMenu;
     private Menu editMenu;
@@ -28,9 +30,10 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
     private MenuItem helpMenuItem;
     private MenuItem aboutMenuItem;
 
-    public MainMenuBar(MainController controller) {
+    public MainMenuBar(MainController controller, ApplicationModel appModel) {
         super();
         this.controller = controller;
+        this.appModel = appModel;
 
         // Initialize menus
         fileMenu = new Menu("File");
@@ -54,14 +57,14 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
         undoMenuItem = new MenuItem("Undo");
         undoMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         undoMenuItem.setOnAction(e -> {
-            controller.executeUndo();
+            this.appModel.executeUndo();
         });
 
         redoMenuItem = new MenuItem("Redo");
         redoMenuItem.setDisable(true);
         redoMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN));
         redoMenuItem.setOnAction(e -> {
-            controller.executeRedo();
+            this.appModel.executeRedo();
         });
 
         helpMenuItem = new MenuItem("Help");

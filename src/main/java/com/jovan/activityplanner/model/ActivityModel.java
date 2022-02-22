@@ -35,6 +35,10 @@ public class ActivityModel {
         return activityList;
     }
 
+    public Activity getLatest() {
+        return activityList.size() < 1 ? null : activityList.get(activityList.size()-1);
+    }
+
     public Activity getActivity(int index) {
         return activityList.get(index);
     }
