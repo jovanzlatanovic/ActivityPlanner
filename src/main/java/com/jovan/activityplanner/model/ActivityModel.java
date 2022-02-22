@@ -35,6 +35,20 @@ public class ActivityModel {
         return activityList;
     }
 
+    public String getUniqueId() {
+        if (activityList.size() < 1) {
+            return "0";
+        }
+
+        int highestId = 0;
+        activityList.forEach(activity -> {
+            activity.getNumericId();
+            //todo: check for highest id, currently returning 0
+        });
+
+        return String.valueOf(highestId);
+    }
+
     public Activity getLatest() {
         return activityList.size() < 1 ? null : activityList.get(activityList.size()-1);
     }

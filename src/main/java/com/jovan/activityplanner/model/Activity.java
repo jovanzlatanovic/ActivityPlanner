@@ -1,9 +1,6 @@
 package com.jovan.activityplanner.model;
 
 import com.jovan.activityplanner.util.LoggerSingleton;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.time.LocalDateTime;
 import java.util.logging.Logger;
@@ -11,16 +8,23 @@ import java.util.logging.Logger;
 public class Activity {
     private Logger logger = LoggerSingleton.getInstance();
 
+    protected String id;
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     private String title;
     private String description;
 
-    public Activity(LocalDateTime startTime, LocalDateTime endTime, String title, String description) {
+    public Activity(String id, LocalDateTime startTime, LocalDateTime endTime, String title, String description) {
         if (startTime.isAfter(endTime)) {
             throw new IllegalArgumentException("Cannot create activity. Start time must be before end time.");
         }
+        if (id.isBlank()) {
+            throw new IllegalArgumentException("Cannot create activity, 'id' must be number and not blank; 'id' provided: " + id);
+        }
+
+        this.id = "activity-" + id;
 
         this.startTime = startTime;
         this.endTime = endTime;
@@ -29,6 +33,15 @@ public class Activity {
         this.description = description;
 
         logger.info("New activity object instantiated " + this.toString());
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getNumericId() {
+        int dashIndex = this.id.indexOf("-");
+        return Integer.valueOf(id.substring(dashIndex+1));
     }
 
     public LocalDateTime getStartTime() {

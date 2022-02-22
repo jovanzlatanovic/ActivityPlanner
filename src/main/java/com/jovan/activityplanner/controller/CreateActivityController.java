@@ -59,7 +59,8 @@ public class CreateActivityController {
             LocalDateTime newTimeStart = LocalDateTime.of(dateStart.getValue(), LocalTime.parse(timeStartText.getText()));
             LocalDateTime newTimeEnd = LocalDateTime.of(dateEnd.getValue(), LocalTime.parse(timeEndText.getText()));
 
-            RootActivity newActivity = new RootActivity(newTimeStart, newTimeEnd, titleText.getText(), descriptionText.getText());
+            String new_id = model.getUniqueId();
+            RootActivity newActivity = new RootActivity(new_id, newTimeStart, newTimeEnd, titleText.getText(), descriptionText.getText());
 
             if (activityToEditIndex < 0) {
                 CreateCommand c = new CreateCommand(appModel, model);

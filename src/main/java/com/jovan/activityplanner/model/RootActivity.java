@@ -6,8 +6,9 @@ import java.util.ArrayList;
 public class RootActivity extends Activity {
     private ArrayList<Activity> subActivities;
 
-    public RootActivity(LocalDateTime start, LocalDateTime end, String title, String description) {
-        super(start, end, title, description);
+    public RootActivity(String id, LocalDateTime start, LocalDateTime end, String title, String description) {
+        super(id, start, end, title, description);
+        this.id = "root_activity-" + id;
         this.subActivities = new ArrayList<Activity>();
     }
 
