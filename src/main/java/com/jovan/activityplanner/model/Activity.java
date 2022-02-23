@@ -101,10 +101,13 @@ public class Activity {
     @Override
     public String toString() {
         return "Activity{" +
+                "id=" + id +
                 "startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }
+
+
 }

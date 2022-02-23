@@ -41,10 +41,12 @@ public class ActivityModel {
         }
 
         int highestId = 0;
-        activityList.forEach(activity -> {
-            activity.getNumericId();
-            //todo: check for highest id, currently returning 0
-        });
+        for(Activity activity : activityList) {
+            int currentId = activity.getNumericId();
+            if (currentId >= highestId) {
+                highestId = currentId + 1;
+            }
+        }
 
         return String.valueOf(highestId);
     }
@@ -61,8 +63,11 @@ public class ActivityModel {
         activityList.set(index, newActivity);
     }
 
-    public void addActivity(Activity a) {
-        activityList.add(a);
+    // Returns at which index the activity was inserted at
+    public int addActivity(Activity a) {
+        int index = findNextDateIndex(a);
+        activityList.add(index, a);
+        return index;
     }
 
     public void deleteActivity(int index) {
@@ -73,6 +78,26 @@ public class ActivityModel {
         // This may look ugly but is necessary to preserve the finality of activityList, might refactor later
         activityList.clear();
         activityList.addAll(a);
+    }
+
+    private int findNextDateIndex(Activity passed) {
+        // todo: implemented as linear search, use binary search later
+
+        //todo: index is not returned properly, it need to step through this algorythm
+        int index = 0;
+        for (int i = 0; i < activityList.size(); i++) {
+            if (passed.getStartTime().compareTo(activityList.get(i).getStartTime()) >= 0) {
+                // passed date greater than activityList date
+                index = i + 1;
+            } else if (passed.getStartTime().compareTo(activityList.get(i).getStartTime()) < 0) {
+                // passed date lesser than activityList date
+                return index; // at this location the passed activity should be placed, and all elements moved to the right
+            } else {
+                logger.severe("Could not find next index in which to insert the passed activity: " + passed);
+                throw new IndexOutOfBoundsException("Could not find next index in which to insert the passed activity");
+            }
+        }
+        return index;
     }
 
     //private final ObjectProperty<Activity> currentActivity = new SimpleObjectProperty<>(null);
