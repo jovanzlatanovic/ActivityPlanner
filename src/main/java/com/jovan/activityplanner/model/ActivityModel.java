@@ -18,7 +18,8 @@ public class ActivityModel {
     private Logger logger = LoggerSingleton.getInstance();
 
     private static ActivityModel singleton_instance = null;
-    private final ObservableList<Activity> activityList;
+    private static int highestId = -1;
+    private /*final*/ ObservableList<Activity> activityList;
     private int latestIndex = -1;
 
     private ActivityModel() {
@@ -40,15 +41,15 @@ public class ActivityModel {
 
     public String getUniqueId() {
         if (activityList.size() < 1) {
-            return "0";
-        }
-
-        int highestId = 0;
-        for(Activity activity : activityList) {
-            int currentId = activity.getNumericId();
-            if (currentId >= highestId) {
-                highestId = currentId + 1;
+            int highestId = 0;
+            for(Activity activity : activityList) {
+                int currentId = activity.getNumericId();
+                if (currentId >= highestId) {
+                    highestId = currentId + 1;
+                }
             }
+        } else {
+            highestId += 1;
         }
 
         return String.valueOf(highestId);
@@ -74,16 +75,45 @@ public class ActivityModel {
         return index;
     }
 
-    public void deleteActivity(int index) {
-        activityList.remove(index);
+    public void deleteActivity(Activity activity) {
+        activityList.remove(activity);
     }
 
     public void updateList(ArrayList<Activity> a) {
-        List<Activity> changes = activityList.stream()
-                .filter(element -> !a.contains(element))
-                .collect(Collectors.toList());
+        // problem: update activitylist with passed arraylist
+        // passed arraylist could be bigger
+        // passed arraylist could be smaller
+        // passed arraylist could have the same number of elements
+        // any element could have a different value than before
 
-        activityList.removeAll(changes);
+        // expected result: activitylist should updated ANY changes made to it from the above criteria
+        // activitylist.set() could be used to update existing elements
+
+        logger.info("Updating list, current state: " + activityList.toString());
+        activityList.setAll(a);
+        logger.info("Updated list, current state: " + activityList.toString());
+
+        /*List<Activity> changes;
+        changes = activityList.stream().map(activity -> {
+
+        });
+
+        if (activityList.size() > a.size()) {
+            // If activity list is bigger than passed list, an item has been deleted
+            changes = activityList.stream().
+                        .filter(element -> !a.contains(element))
+                        .collect(Collectors.toList());
+            activityList.removeAll(changes);
+        } else if (activityList.size() < a.size()) {
+            // Otherwise if the passed list is bigger, an item has been added
+            changes = a.stream()
+                    .filter(element -> !activityList.contains(element))
+                    .collect(Collectors.toList());
+            activityList.addAll(changes);
+        } else {
+            // Finally if the list sizes are the same, update all elements inside the list
+
+        }*/
     }
 
     private int findNextDateIndex(Activity passed) {

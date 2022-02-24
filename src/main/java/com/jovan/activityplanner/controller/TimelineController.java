@@ -4,6 +4,7 @@ import com.jovan.activityplanner.model.Activity;
 import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.RootActivity;
+import com.jovan.activityplanner.model.command.DeleteCommand;
 import com.jovan.activityplanner.util.LoggerSingleton;
 import com.jovan.activityplanner.view.ActivityContainer;
 import javafx.animation.RotateTransition;
@@ -40,11 +41,21 @@ public class TimelineController {
 
         // Setup activity model listener
         model.getActivityList().addListener((ListChangeListener<? super Activity>) change -> {
-            change.next();
-            if (change.wasAdded())
-                handleActivityModelAddition(change.getFrom());
-            if (change.wasRemoved())
-                HandleActivityModelDeletion(change.getFrom(), change.getTo());
+            logger.info("Detected change on activity list");
+            while (change.next()) {
+                if (change.wasReplaced()) {
+                    // undo
+                    logger.info("Undo change was detected");
+                } else if (change.wasRemoved()) {
+                    // could be undo of first element or deleted activity
+                    logger.info("Removal change was detected");
+                    handleActivityModelDeletion(change.getFrom(), change.getTo());
+                } else if (change.wasAdded()) {
+                    // new activity, should add new ActivityContainer to timeline
+                    logger.info("Was added change detected");
+                    handleActivityModelAddition(change.getFrom());
+                }
+            }
         });
 
         /*TranslateTransition translate = new TranslateTransition();
@@ -66,7 +77,36 @@ public class TimelineController {
         logger.info("Timeline controller initialized");
     }
 
-    private ContextMenu getContextMenu() {
+    private void handleDeleteActivity(Activity activityToDelete) {
+        DeleteCommand c = new DeleteCommand(appModel, model);
+        c.setActivityToDelete(activityToDelete);
+        this.appModel.executeCommand(c);
+    }
+
+    public void handleActivityModelAddition(int latestIndex) {
+        addActivityToView(latestIndex, (RootActivity) model.getActivity(latestIndex));
+    }
+
+    public void handleActivityModelUndo(int undoFrom, int undoTo) {
+        //undo needs to update everything
+    }
+
+    public void handleActivityModelDeletion(int deletedFrom, int deletedTo) {
+        // Sublist throws ConcurrentModificationException when removeall is used directly after sublist:
+        // List<ActivityContainer> containersToRemove = activityContainers.subList(deletedFrom, deletedTo + 1);
+        //activityContainers.removeAll(containersToRemove);
+
+        List<ActivityContainer> containersToRemove = new ArrayList<>();
+
+        for (int i = 0; i < activityContainers.size(); i++) {
+            if (i >= deletedFrom && i <= deletedTo)
+                containersToRemove.add(activityContainers.get(i));
+        }
+
+        rootHBox.getChildren().removeAll(containersToRemove);
+    }
+
+    private ActivityContainer createNewActivityContainer(RootActivity activity) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem editMenuItem = new MenuItem("Edit");
         SeparatorMenuItem sep = new SeparatorMenuItem();
@@ -78,26 +118,14 @@ public class TimelineController {
         });
 
         deleteMenuItem.setOnAction(e -> {
-            //handleDeleteActivity(cell.getIndex());
+            handleDeleteActivity(activity);
         });
 
-        // must bind properties later on for auto updating view after editing activity
-        // cell.textProperty().bind(cell.itemProperty().asString());
-
-        return contextMenu;
-    }
-
-    public void handleActivityModelAddition(int latestIndex) {
-        addActivityToView(latestIndex, (RootActivity) model.getActivity(latestIndex));
-    }
-
-    public void HandleActivityModelDeletion(int deletedFrom, int deletedTo) {
-        activityContainers.removeAll(activityContainers.subList(deletedFrom, deletedTo+1));
-        rootHBox.getChildren().remove(deletedFrom, deletedTo+1);
+        return new ActivityContainer(activity, new VBox(), contextMenu);
     }
 
     private void addActivityToView(int index, RootActivity activity) {
-        ActivityContainer container = new ActivityContainer(activity, new VBox(), getContextMenu());
+        ActivityContainer container = createNewActivityContainer(activity);
         rootHBox.getChildren().add(index, container);
         activityContainers.add(index, container);
         logger.info("Added activity container to timeline view; index = " + index + ", activity = " + activity);
