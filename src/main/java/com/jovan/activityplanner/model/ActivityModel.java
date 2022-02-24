@@ -59,6 +59,10 @@ public class ActivityModel {
         return latestIndex < 0 ? null : activityList.get(latestIndex);
     }
 
+    public int getActivityIndex(Activity activity) {
+        return activityList.indexOf(activity);
+    }
+
     public Activity getActivity(int index) {
         return activityList.get(index);
     }
@@ -92,28 +96,6 @@ public class ActivityModel {
         logger.info("Updating list, current state: " + activityList.toString());
         activityList.setAll(a);
         logger.info("Updated list, current state: " + activityList.toString());
-
-        /*List<Activity> changes;
-        changes = activityList.stream().map(activity -> {
-
-        });
-
-        if (activityList.size() > a.size()) {
-            // If activity list is bigger than passed list, an item has been deleted
-            changes = activityList.stream().
-                        .filter(element -> !a.contains(element))
-                        .collect(Collectors.toList());
-            activityList.removeAll(changes);
-        } else if (activityList.size() < a.size()) {
-            // Otherwise if the passed list is bigger, an item has been added
-            changes = a.stream()
-                    .filter(element -> !activityList.contains(element))
-                    .collect(Collectors.toList());
-            activityList.addAll(changes);
-        } else {
-            // Finally if the list sizes are the same, update all elements inside the list
-
-        }*/
     }
 
     private int findNextDateIndex(Activity passed) {
@@ -134,18 +116,4 @@ public class ActivityModel {
         }
         return index;
     }
-
-    //private final ObjectProperty<Activity> currentActivity = new SimpleObjectProperty<>(null);
-
-    /*public ObjectProperty<Activity> currentActivityProperty() {
-        return currentActivity;
-    }
-
-    public final Activity getCurrentActivity() {
-        return currentActivity.get();
-    }
-
-    public final void setCurrentActivity(Activity activity) {
-        currentActivity.set(activity);
-    }*/
 }

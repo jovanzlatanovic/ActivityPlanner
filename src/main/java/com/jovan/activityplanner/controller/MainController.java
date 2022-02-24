@@ -129,18 +129,4 @@ public class MainController {
         }
         dialog.show();
     }
-
-    private void handleEditActivityDialog(ActionEvent event, int activityIndex) {
-        //Node parentNode = (Node) event.getSource();
-        CreateActivityDialog dialog = null;
-        try {
-            dialog = new CreateActivityDialog(this.model, activityIndex);
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error opening the activity edit dialog");
-            alert.setHeaderText("An error occured while trying to a open the activity.");
-            alert.setContentText(e.toString());
-        }
-        dialog.show();
-    }
 }
