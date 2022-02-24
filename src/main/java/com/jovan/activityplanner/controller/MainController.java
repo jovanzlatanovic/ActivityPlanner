@@ -116,12 +116,6 @@ public class MainController {
         }
     }
 
-    private void handleDeleteActivity(int indexToDelete) {
-        DeleteCommand c = new DeleteCommand(appModel, model);
-        c.setActivityIndxed(indexToDelete);
-        this.appModel.executeCommand(c);
-    }
-
     public void handleNewActivityDialog(ActionEvent event) {
         //Node parentNode = (Node) event.getSource();
         CreateActivityDialog dialog = null;
