@@ -42,9 +42,9 @@ public class TimelineController {
         model.getActivityList().addListener((ListChangeListener<? super Activity>) change -> {
             change.next();
             if (change.wasAdded())
-                handleActivityModelAddition();
+                handleActivityModelAddition(change.getFrom());
             if (change.wasRemoved())
-                HandleActivityModelDeletion((RootActivity) change.getRemoved().get(0)); //todo fix casting, pls no like this
+                HandleActivityModelDeletion(change.getFrom(), change.getTo());
         });
 
         /*TranslateTransition translate = new TranslateTransition();
@@ -87,29 +87,19 @@ public class TimelineController {
         return contextMenu;
     }
 
-    public void handleActivityModelAddition() {
-        addActivityToView((RootActivity) model.getLatest());
+    public void handleActivityModelAddition(int latestIndex) {
+        addActivityToView(latestIndex, (RootActivity) model.getActivity(latestIndex));
     }
 
-    public void HandleActivityModelDeletion(RootActivity deletedActivity) {
-        //TODO: stopped here, see how to update list without recreating shit, issue #AP-52
-
-        activityContainers.forEach(container -> {
-            //check if there are any extra containers that do not fit the model
-
-        });
-
-        System.out.println();
-
-        //if the above implementation doesn't work or is bad, try an alternative:
-        //implement id into activities
-        //implement find container by activity id
+    public void HandleActivityModelDeletion(int deletedFrom, int deletedTo) {
+        activityContainers.removeAll(activityContainers.subList(deletedFrom, deletedTo+1));
+        rootHBox.getChildren().remove(deletedFrom, deletedTo+1);
     }
 
-    private void addActivityToView(RootActivity activity) {
+    private void addActivityToView(int index, RootActivity activity) {
         ActivityContainer container = new ActivityContainer(activity, new VBox(), getContextMenu());
-        rootHBox.getChildren().add(container);
-        activityContainers.add(container);
-        logger.info("Added activity container to timeline view");
+        rootHBox.getChildren().add(index, container);
+        activityContainers.add(index, container);
+        logger.info("Added activity container to timeline view; index = " + index + ", activity = " + activity);
     }
 }

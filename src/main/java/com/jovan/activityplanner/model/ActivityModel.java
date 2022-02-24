@@ -8,8 +8,10 @@ import javafx.collections.ObservableList;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ActivityModel {
     //TODO: replace plain activity with root activity to implement sub activity functionality
@@ -17,6 +19,7 @@ public class ActivityModel {
 
     private static ActivityModel singleton_instance = null;
     private final ObservableList<Activity> activityList;
+    private int latestIndex = -1;
 
     private ActivityModel() {
         activityList = FXCollections.observableArrayList();
@@ -52,7 +55,7 @@ public class ActivityModel {
     }
 
     public Activity getLatest() {
-        return activityList.size() < 1 ? null : activityList.get(activityList.size()-1);
+        return latestIndex < 0 ? null : activityList.get(latestIndex);
     }
 
     public Activity getActivity(int index) {
@@ -66,6 +69,7 @@ public class ActivityModel {
     // Returns at which index the activity was inserted at
     public int addActivity(Activity a) {
         int index = findNextDateIndex(a);
+        latestIndex = index;
         activityList.add(index, a);
         return index;
     }
@@ -75,15 +79,16 @@ public class ActivityModel {
     }
 
     public void updateList(ArrayList<Activity> a) {
-        // This may look ugly but is necessary to preserve the finality of activityList, might refactor later
-        activityList.clear();
-        activityList.addAll(a);
+        List<Activity> changes = activityList.stream()
+                .filter(element -> !a.contains(element))
+                .collect(Collectors.toList());
+
+        activityList.removeAll(changes);
     }
 
     private int findNextDateIndex(Activity passed) {
         // todo: implemented as linear search, use binary search later
 
-        //todo: index is not returned properly, it need to step through this algorythm
         int index = 0;
         for (int i = 0; i < activityList.size(); i++) {
             if (passed.getStartTime().compareTo(activityList.get(i).getStartTime()) >= 0) {
