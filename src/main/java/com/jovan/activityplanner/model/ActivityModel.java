@@ -68,7 +68,8 @@ public class ActivityModel {
     }
 
     public void updateActivity(int index, Activity newActivity) {
-        activityList.set(index, newActivity);
+        deleteActivity(index);
+        addActivity(newActivity);
     }
 
     // Returns at which index the activity was inserted at
@@ -81,6 +82,10 @@ public class ActivityModel {
 
     public void deleteActivity(Activity activity) {
         activityList.remove(activity);
+    }
+
+    public void deleteActivity(int index) {
+        activityList.remove(index);
     }
 
     public void updateList(ArrayList<Activity> a) {
