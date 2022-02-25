@@ -2,7 +2,9 @@ package com.jovan.activityplanner.view;
 
 import com.jovan.activityplanner.Main;
 import com.jovan.activityplanner.controller.MainController;
+import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
+import com.jovan.activityplanner.model.RootActivity;
 import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import javafx.application.Platform;
@@ -12,15 +14,18 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 public class MainMenuBar extends MenuBar implements CommandHistoryListener {
     private MainController controller;
     private ApplicationModel appModel;
+    private ActivityModel model_forDebug; // here only for debug options
 
     private Menu fileMenu;
     private Menu editMenu;
     private Menu helpMenu;
+    private Menu debugMenu;
 
     private MenuItem newMenuItem;
     private SeparatorMenuItem separator;
@@ -30,15 +35,21 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
     private MenuItem helpMenuItem;
     private MenuItem aboutMenuItem;
 
+    private MenuItem debugAddItemsMenuItem;
+    private MenuItem debugRemoveItemsMenuItem;
+
     public MainMenuBar(MainController controller, ApplicationModel appModel) {
         super();
         this.controller = controller;
         this.appModel = appModel;
 
+        this.model_forDebug = ActivityModel.getInstance();
+
         // Initialize menus
         fileMenu = new Menu("File");
         editMenu = new Menu("Edit");
         helpMenu = new Menu("Help");
+        debugMenu = new Menu("Debug");
 
         // Initialize menu items, their shortcuts and their actions
         newMenuItem = new MenuItem("New activity");
@@ -89,11 +100,21 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
             aboutDialog.showAndWait();
         });
 
+        debugAddItemsMenuItem = new MenuItem("Create dummy activities");
+        debugAddItemsMenuItem.setOnAction(e -> {
+            for (int i = 0; i < 10; i++) {
+                RootActivity newActivity = new RootActivity(this.model_forDebug.getUniqueId(), LocalDateTime.now(), LocalDateTime.now().plusHours(1), "Debug " + String.valueOf(i), "This is a text for debugging and spamming activities.");
+                this.model_forDebug.addActivity(newActivity);
+            }
+        });
+
         // Add all menu items to their menus and menus to the menu bar
         fileMenu.getItems().addAll(newMenuItem, separator, exitMenuItem);
         editMenu.getItems().addAll(undoMenuItem, redoMenuItem);
         helpMenu.getItems().addAll(helpMenuItem, aboutMenuItem);
-        this.getMenus().addAll(fileMenu, editMenu, helpMenu);
+        debugMenu.getItems().addAll(debugAddItemsMenuItem);
+
+        this.getMenus().addAll(fileMenu, editMenu, helpMenu, debugMenu);
     }
 
     private void updateRedoMenuItemVisibility(int redoSize) {

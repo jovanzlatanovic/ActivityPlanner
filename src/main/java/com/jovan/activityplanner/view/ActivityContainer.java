@@ -12,6 +12,9 @@ public class ActivityContainer extends TitledPane {
 
     public ActivityContainer(RootActivity activity, VBox infoContainer, ContextMenu contextMenu) {
         super(activity.getTitle(), infoContainer);
+        this.setMinWidth(USE_PREF_SIZE);
+        this.setMinHeight(USE_PREF_SIZE);
+        this.setPrefWidth(180);
 
         // Setting activity and context menu
         this.activity = activity;
@@ -22,7 +25,9 @@ public class ActivityContainer extends TitledPane {
         Label endTime = new Label(activity.getEndTime().toString());
         Label description = new Label(activity.getDescription());
 
-        infoContainer.getChildren().addAll(startTime, endTime, description);;
+        description.setWrapText(true);
+
+        infoContainer.getChildren().addAll(startTime, endTime, description);
     }
 
     public RootActivity getActivity() {

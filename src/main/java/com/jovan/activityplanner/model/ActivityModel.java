@@ -88,6 +88,10 @@ public class ActivityModel {
         activityList.remove(index);
     }
 
+    public int getNumberOfActivities() {
+        return activityList.size();
+    }
+
     public void updateList(ArrayList<Activity> a) {
         // problem: update activitylist with passed arraylist
         // passed arraylist could be bigger

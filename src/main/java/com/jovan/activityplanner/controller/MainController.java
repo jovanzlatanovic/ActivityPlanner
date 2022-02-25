@@ -24,6 +24,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -38,7 +39,7 @@ import java.util.logging.Logger;
 public class MainController {
 
     @FXML private BorderPane rootBorderPane;
-    @FXML private HBox centerContainer;
+    @FXML private AnchorPane timelineAnchor;
     @FXML private MenuBar menuBar;
 
     private Logger logger = LoggerSingleton.getInstance();
@@ -73,15 +74,15 @@ public class MainController {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/timelineView.fxml"));
         try {
             ScrollPane timelineView = fxmlLoader.load();
-            rootBorderPane.setCenter(centerContainer);
-            centerContainer.getChildren().add(timelineView);
+            timelineAnchor.getChildren().add(timelineView);
 
-            //centerContainer.prefWidthProperty().bind(rootBorderPane.widthProperty());
-            //centerContainer.prefHeightProperty().bind(rootBorderPane.heightProperty());
+            AnchorPane.setTopAnchor(timelineView, 0.0);
+            AnchorPane.setBottomAnchor(timelineView, 0.0);
+            AnchorPane.setLeftAnchor(timelineView, 0.0);
+            AnchorPane.setRightAnchor(timelineView, 0.0);
 
-            //timelineView.prefWidthProperty().bind(centerContainer.widthProperty());
-            //timelineView.prefHeightProperty().bind(centerContainer.heightProperty());
-
+            rootBorderPane.setCenter(timelineAnchor);
+            
             logger.info("Timeline view loaded");
         } catch (IOException e) {
             logger.severe("Exception occured while loading timeline view: " + e.toString());
