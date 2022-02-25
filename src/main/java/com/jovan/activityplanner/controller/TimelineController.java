@@ -5,6 +5,9 @@ import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.RootActivity;
 import com.jovan.activityplanner.model.command.DeleteCommand;
+import com.jovan.activityplanner.model.filemanager.AbstractFileLoader;
+import com.jovan.activityplanner.model.filemanager.ActivityLoader;
+import com.jovan.activityplanner.model.filemanager.LocalFileSystem;
 import com.jovan.activityplanner.util.LoggerSingleton;
 import com.jovan.activityplanner.view.ActivityContainer;
 import com.jovan.activityplanner.view.CreateActivityDialog;
@@ -31,6 +34,7 @@ public class TimelineController {
     private Logger logger = LoggerSingleton.getInstance();
     private ApplicationModel appModel;
     private ActivityModel model;
+
     //private ArrayList<ActivityContainer> activityContainers = new ArrayList<>();
 
     @FXML
