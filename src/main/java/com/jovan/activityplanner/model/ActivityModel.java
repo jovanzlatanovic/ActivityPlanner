@@ -8,15 +8,19 @@ import javafx.collections.ObservableList;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ActivityModel {
     //TODO: replace plain activity with root activity to implement sub activity functionality
     private Logger logger = LoggerSingleton.getInstance();
 
     private static ActivityModel singleton_instance = null;
-    private final ObservableList<Activity> activityList;
+    private int highestId = -1;
+    private /*final*/ ObservableList<Activity> activityList;
+    private int latestIndex = -1;
 
     private ActivityModel() {
         activityList = FXCollections.observableArrayList();
@@ -35,39 +39,90 @@ public class ActivityModel {
         return activityList;
     }
 
+    public String getUniqueId() {
+        if (activityList.size() < 1) {
+            highestId = 0;
+            for(Activity activity : activityList) {
+                int currentId = activity.getNumericId();
+                if (currentId >= highestId) {
+                    highestId = currentId + 1;
+                }
+            }
+        } else {
+            highestId += 1;
+        }
+
+        return String.valueOf(highestId);
+    }
+
+    public Activity getLatest() {
+        return latestIndex < 0 ? null : activityList.get(latestIndex);
+    }
+
+    public int getActivityIndex(Activity activity) {
+        return activityList.indexOf(activity);
+    }
+
     public Activity getActivity(int index) {
         return activityList.get(index);
     }
 
     public void updateActivity(int index, Activity newActivity) {
-        activityList.set(index, newActivity);
+        deleteActivity(index);
+        addActivity(newActivity);
     }
 
-    public void addActivity(Activity a) {
-        activityList.add(a);
+    // Returns at which index the activity was inserted at
+    public int addActivity(Activity a) {
+        int index = findNextDateIndex(a);
+        latestIndex = index;
+        activityList.add(index, a);
+        return index;
+    }
+
+    public void deleteActivity(Activity activity) {
+        activityList.remove(activity);
     }
 
     public void deleteActivity(int index) {
         activityList.remove(index);
     }
 
+    public int getNumberOfActivities() {
+        return activityList.size();
+    }
+
     public void updateList(ArrayList<Activity> a) {
-        // This may look ugly but is necessary to preserve the finality of activityList, might refactor later
-        activityList.clear();
-        activityList.addAll(a);
+        // problem: update activitylist with passed arraylist
+        // passed arraylist could be bigger
+        // passed arraylist could be smaller
+        // passed arraylist could have the same number of elements
+        // any element could have a different value than before
+
+        // expected result: activitylist should updated ANY changes made to it from the above criteria
+        // activitylist.set() could be used to update existing elements
+
+        logger.info("Updating list, current state: " + activityList.toString());
+        activityList.setAll(a);
+        logger.info("Updated list, current state: " + activityList.toString());
     }
 
-    //private final ObjectProperty<Activity> currentActivity = new SimpleObjectProperty<>(null);
+    private int findNextDateIndex(Activity passed) {
+        // todo: implemented as linear search, use binary search later
 
-    /*public ObjectProperty<Activity> currentActivityProperty() {
-        return currentActivity;
+        int index = 0;
+        for (int i = 0; i < activityList.size(); i++) {
+            if (passed.getStartTime().compareTo(activityList.get(i).getStartTime()) >= 0) {
+                // passed date greater than activityList date
+                index = i + 1;
+            } else if (passed.getStartTime().compareTo(activityList.get(i).getStartTime()) < 0) {
+                // passed date lesser than activityList date
+                return index; // at this location the passed activity should be placed, and all elements moved to the right
+            } else {
+                logger.severe("Could not find next index in which to insert the passed activity: " + passed);
+                throw new IndexOutOfBoundsException("Could not find next index in which to insert the passed activity");
+            }
+        }
+        return index;
     }
-
-    public final Activity getCurrentActivity() {
-        return currentActivity.get();
-    }
-
-    public final void setCurrentActivity(Activity activity) {
-        currentActivity.set(activity);
-    }*/
 }

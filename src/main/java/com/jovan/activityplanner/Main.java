@@ -12,11 +12,11 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class Main extends Application {
+    private Logger logger = LoggerSingleton.getInstance();
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Initialize logger
-        Logger logger = LoggerSingleton.getInstance();
-
         logger.info("FXML Loader loading resource.");
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/mainView.fxml"));
         Scene mainScene = new Scene(fxmlLoader.load(), 1000, 600);
@@ -28,13 +28,18 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                logger.info("Goodbye <3");
+                logger.info("Closing primary stage");
             }
         });
 
         // Application start
         primaryStage.show();
         logger.info("Showing primary stage.");
+    }
+
+    @Override
+    public void stop() {
+        logger.info("Application stopped. Goodbye <3");
     }
 
     public static void main(String[] args) {

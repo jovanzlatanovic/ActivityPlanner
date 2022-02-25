@@ -2,6 +2,8 @@ package com.jovan.activityplanner.model;
 
 import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.command.CommandHistory;
+import com.jovan.activityplanner.model.command.RedoCommand;
+import com.jovan.activityplanner.model.command.UndoCommand;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import com.jovan.activityplanner.util.LoggerSingleton;
 
@@ -12,9 +14,15 @@ public class ApplicationModel {
 
     private static ApplicationModel instance = null;
     private final CommandHistory history;
+    private final UndoCommand undoCommand;
+    private final RedoCommand redoCommand;
 
     private ApplicationModel() {
+        ActivityModel model = ActivityModel.getInstance();
+
         history = new CommandHistory();
+        undoCommand = new UndoCommand(this, model);
+        redoCommand = new RedoCommand(this, model);
         logger.info("ApplicationModel singleton created");
     }
 
@@ -23,6 +31,14 @@ public class ApplicationModel {
             instance = new ApplicationModel();
 
         return instance;
+    }
+
+    public void executeUndo() {
+        this.executeCommand(undoCommand);
+    }
+
+    public void executeRedo() {
+        this.executeCommand(redoCommand);
     }
 
     public void executeCommand(Command c) {
