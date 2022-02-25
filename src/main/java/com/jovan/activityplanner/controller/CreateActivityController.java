@@ -6,6 +6,7 @@ import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.RootActivity;
 import com.jovan.activityplanner.model.command.CreateCommand;
 import com.jovan.activityplanner.model.command.UpdateCommand;
+import com.jovan.activityplanner.util.LoggerSingleton;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.logging.Logger;
 
 public class CreateActivityController {
 
@@ -29,6 +31,8 @@ public class CreateActivityController {
     @FXML private TextField timeEndText;
     @FXML private TextField titleText;
     @FXML private TextArea descriptionText;
+
+    private Logger logger = LoggerSingleton.getInstance();
 
     private ActivityModel model;
     private ApplicationModel appModel;
@@ -46,6 +50,8 @@ public class CreateActivityController {
 
         this.timeStartText.setText(LocalTime.now().truncatedTo(ChronoUnit.MINUTES).toString());
         this.timeEndText.setText(LocalTime.now().plus(1, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES).toString());
+
+        logger.info("Create activity scene initialized");
     }
 
     private void handleCreation() {
@@ -53,7 +59,8 @@ public class CreateActivityController {
             LocalDateTime newTimeStart = LocalDateTime.of(dateStart.getValue(), LocalTime.parse(timeStartText.getText()));
             LocalDateTime newTimeEnd = LocalDateTime.of(dateEnd.getValue(), LocalTime.parse(timeEndText.getText()));
 
-            RootActivity newActivity = new RootActivity(newTimeStart, newTimeEnd, titleText.getText(), descriptionText.getText());
+            String new_id = model.getUniqueId();
+            RootActivity newActivity = new RootActivity(new_id, newTimeStart, newTimeEnd, titleText.getText(), descriptionText.getText());
 
             if (activityToEditIndex < 0) {
                 CreateCommand c = new CreateCommand(appModel, model);

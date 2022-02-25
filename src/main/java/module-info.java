@@ -2,6 +2,7 @@ module com.jovan.activityplanner {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires java.logging;
 
 
     opens com.jovan.activityplanner to javafx.fxml;
