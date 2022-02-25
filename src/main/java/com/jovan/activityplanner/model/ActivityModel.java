@@ -18,7 +18,7 @@ public class ActivityModel {
     private Logger logger = LoggerSingleton.getInstance();
 
     private static ActivityModel singleton_instance = null;
-    private static int highestId = -1;
+    private int highestId = -1;
     private /*final*/ ObservableList<Activity> activityList;
     private int latestIndex = -1;
 
@@ -41,7 +41,7 @@ public class ActivityModel {
 
     public String getUniqueId() {
         if (activityList.size() < 1) {
-            int highestId = 0;
+            highestId = 0;
             for(Activity activity : activityList) {
                 int currentId = activity.getNumericId();
                 if (currentId >= highestId) {
