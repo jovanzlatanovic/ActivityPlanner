@@ -82,7 +82,7 @@ public class MainController {
             AnchorPane.setRightAnchor(timelineView, 0.0);
 
             rootBorderPane.setCenter(timelineAnchor);
-            
+
             logger.info("Timeline view loaded");
         } catch (IOException e) {
             logger.severe("Exception occured while loading timeline view: " + e.toString());

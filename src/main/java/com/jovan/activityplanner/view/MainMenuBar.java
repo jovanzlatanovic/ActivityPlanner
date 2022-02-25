@@ -6,6 +6,7 @@ import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.RootActivity;
 import com.jovan.activityplanner.model.command.Command;
+import com.jovan.activityplanner.model.command.CreateCommand;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import javafx.application.Platform;
 import javafx.scene.control.*;
@@ -104,7 +105,10 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
         debugAddItemsMenuItem.setOnAction(e -> {
             for (int i = 0; i < 10; i++) {
                 RootActivity newActivity = new RootActivity(this.model_forDebug.getUniqueId(), LocalDateTime.now(), LocalDateTime.now().plusHours(1), "Debug " + String.valueOf(i), "This is a text for debugging and spamming activities.");
-                this.model_forDebug.addActivity(newActivity);
+
+                CreateCommand c = new CreateCommand(appModel, model_forDebug);
+                c.setActivityToCreate(newActivity);
+                this.appModel.executeCommand(c);
             }
         });
 
