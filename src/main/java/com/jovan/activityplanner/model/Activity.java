@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
 public class Activity {
-    private Logger logger = LoggerSingleton.getInstance();
+    private transient Logger logger = LoggerSingleton.getInstance();
 
     protected String id;
 
