@@ -21,6 +21,6 @@ public class ActivityLoader extends AbstractFileLoader {
 
     @Override
     public void load() {
-        model.updateList(new ArrayList<Activity>(filesystem.read(filepath)));
+        model.updateList((ArrayList<Activity>) filesystem.read(filepath));
     }
 }

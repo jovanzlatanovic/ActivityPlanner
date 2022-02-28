@@ -62,7 +62,7 @@ public class TimelineController {
                 } else if (change.wasAdded()) {
                     // new activity, should add new ActivityContainer to timeline
                     logger.info("Was added change detected");
-                    handleActivityModelAddition(change.getFrom());
+                    handleActivityModelAddition(change.getFrom(), change.getTo());
                 }
             }
         });
@@ -106,8 +106,10 @@ public class TimelineController {
         dialog.show();
     }
 
-    public void handleActivityModelAddition(int latestIndex) {
-        addActivityToView(latestIndex, (RootActivity) model.getActivity(latestIndex));
+    public void handleActivityModelAddition(int fromIndex, int toIndex) {
+        for (int i = fromIndex; i < toIndex; i++) {
+            addActivityToView(i, (RootActivity) model.getActivity(i));
+        }
     }
 
     public void handleActivityModelUndo(int undoFrom, int undoTo) {

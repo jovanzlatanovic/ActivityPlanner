@@ -28,7 +28,7 @@ public class ApplicationModel {
         undoCommand = new UndoCommand(this, model);
         redoCommand = new RedoCommand(this, model);
 
-        fileLoader = new ActivityLoader(model, new LocalFileSystem(), "activities.save");
+        fileLoader = new ActivityLoader(model, new LocalFileSystem(), "activities.json");
 
         logger.info("ApplicationModel singleton created");
     }
@@ -74,11 +74,13 @@ public class ApplicationModel {
     public void save() {
         logger.info("Saving to file");
         fileLoader.save();
+        logger.info("File saved");
     }
 
     public void load() {
         logger.info("Loading file");
         fileLoader.load();
+        logger.info("File loaded");
     }
 
     public void addHistoryListener(CommandHistoryListener listener) {
