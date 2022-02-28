@@ -4,6 +4,9 @@ import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.command.CommandHistory;
 import com.jovan.activityplanner.model.command.RedoCommand;
 import com.jovan.activityplanner.model.command.UndoCommand;
+import com.jovan.activityplanner.model.filemanager.AbstractFileLoader;
+import com.jovan.activityplanner.model.filemanager.ActivityLoader;
+import com.jovan.activityplanner.model.filemanager.LocalFileSystem;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import com.jovan.activityplanner.util.LoggerSingleton;
 
@@ -16,6 +19,7 @@ public class ApplicationModel {
     private final CommandHistory history;
     private final UndoCommand undoCommand;
     private final RedoCommand redoCommand;
+    private final AbstractFileLoader fileLoader;
 
     private ApplicationModel() {
         ActivityModel model = ActivityModel.getInstance();
@@ -23,6 +27,9 @@ public class ApplicationModel {
         history = new CommandHistory();
         undoCommand = new UndoCommand(this, model);
         redoCommand = new RedoCommand(this, model);
+
+        fileLoader = new ActivityLoader(model, new LocalFileSystem(), "activities.json");
+
         logger.info("ApplicationModel singleton created");
     }
 
@@ -62,6 +69,18 @@ public class ApplicationModel {
         if (command != null) {
             command.redo();
         }
+    }
+
+    public void save() {
+        logger.info("Saving to file");
+        fileLoader.save();
+        logger.info("File saved");
+    }
+
+    public void load() {
+        logger.info("Loading file");
+        fileLoader.load();
+        logger.info("File loaded");
     }
 
     public void addHistoryListener(CommandHistoryListener listener) {

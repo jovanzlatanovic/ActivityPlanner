@@ -29,7 +29,8 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
     private Menu debugMenu;
 
     private MenuItem newMenuItem;
-    private SeparatorMenuItem separator;
+    private MenuItem saveMenuItem;
+    private MenuItem loadMenuItem;
     private MenuItem exitMenuItem;
     private MenuItem undoMenuItem;
     private MenuItem redoMenuItem;
@@ -52,6 +53,10 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
         helpMenu = new Menu("Help");
         debugMenu = new Menu("Debug");
 
+        // Initialize separators
+        SeparatorMenuItem separator1 = new SeparatorMenuItem();
+        SeparatorMenuItem separator2 = new SeparatorMenuItem();
+
         // Initialize menu items, their shortcuts and their actions
         newMenuItem = new MenuItem("New activity");
         newMenuItem.setOnAction(e -> {
@@ -59,7 +64,16 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
         });
         newMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 
-        separator = new SeparatorMenuItem();
+        saveMenuItem = new MenuItem("Save");
+        saveMenuItem.setOnAction(e -> {
+            appModel.save();
+        });
+        saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+
+        loadMenuItem = new MenuItem("Load");
+        loadMenuItem.setOnAction(e -> {
+            appModel.load();
+        });
 
         exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(e -> {
@@ -113,7 +127,7 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
         });
 
         // Add all menu items to their menus and menus to the menu bar
-        fileMenu.getItems().addAll(newMenuItem, separator, exitMenuItem);
+        fileMenu.getItems().addAll(newMenuItem, separator1, saveMenuItem, loadMenuItem, separator2, exitMenuItem);
         editMenu.getItems().addAll(undoMenuItem, redoMenuItem);
         helpMenu.getItems().addAll(helpMenuItem, aboutMenuItem);
         debugMenu.getItems().addAll(debugAddItemsMenuItem);

@@ -4,15 +4,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class RootActivity extends Activity {
-    private ArrayList<Activity> subActivities;
+    //private ArrayList<Activity> subActivities;
 
     public RootActivity(String id, LocalDateTime start, LocalDateTime end, String title, String description) {
         super(id, start, end, title, description);
         this.id = "root_activity-" + id;
-        this.subActivities = new ArrayList<Activity>();
+        //this.subActivities = new ArrayList<Activity>();
     }
 
-    public boolean addSubActivity(Activity activity) {
+    /*public boolean addSubActivity(Activity activity) {
         // The sub activity must be constrained within the root activity
         if (this.getStartTime().compareTo(activity.getStartTime()) > 0 || this.getEndTime().compareTo(activity.getEndTime()) < 0) {
             return false;
@@ -20,7 +20,7 @@ public class RootActivity extends Activity {
 
         subActivities.add(activity);
         return true;
-    }
+    }*/
 
     @Override
     public String toString() {
