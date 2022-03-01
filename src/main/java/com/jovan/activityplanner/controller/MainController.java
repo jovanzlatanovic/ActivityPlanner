@@ -58,6 +58,14 @@ public class MainController {
         this.model = ActivityModel.getInstance();
         this.appModel = ApplicationModel.getInstance();
 
+        // Set click and drag for window
+//        rootBorderPane.setOnMousePressed(pressEvent -> {
+//            rootBorderPane.setOnMouseDragged(dragEvent -> {
+//                rootBorderPane.getScene().getWindow().setX(dragEvent.getScreenX() - pressEvent.getSceneX());
+//                rootBorderPane.getScene().getWindow().setY(dragEvent.getScreenY() - pressEvent.getSceneY());
+//            });
+//        });
+
         //activityListView.setItems(model.getActivityList());
 
         // Setup commands
@@ -65,7 +73,9 @@ public class MainController {
         redoCommand = new RedoCommand(appModel, model);
 
         // Menu bar initialization
-        menuBar = new MainMenuBar(this, appModel);
+        MenuBar newMenuBar = new MainMenuBar(this, appModel);
+        newMenuBar.setId(menuBar.getId());
+        menuBar = newMenuBar;
         appModel.addHistoryListener((CommandHistoryListener) menuBar);
         rootBorderPane.setTop(menuBar);
 
@@ -74,6 +84,7 @@ public class MainController {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/timelineView.fxml"));
         try {
             ScrollPane timelineView = fxmlLoader.load();
+
             timelineAnchor.getChildren().add(timelineView);
 
             AnchorPane.setTopAnchor(timelineView, 0.0);

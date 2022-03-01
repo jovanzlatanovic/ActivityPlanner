@@ -1,0 +1,92 @@
+/*
+    Colors:
+    Grayish white: #EEEEEE
+    Lighter-ish gray: #6d7175
+    Light-gray: #C6CED6
+    Gray: #424B54
+    Magenta: #FF01FB
+    Less aggressive magenta: #ff70fd
+    Blue: #02A9EA
+    Lemon: #FAFF00
+    Error pink: #ea025b
+*/
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('/Roboto-Bold.ttf');
+}
+
+.root {
+    -fx-font-family: "Roboto";
+}
+
+.text-field {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+}
+
+.text-area {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+}
+
+#createActivityVBox Label {
+    -fx-text-fill: #6d7175;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
+}
+
+#createActivityVBox #firstLabel {
+    -fx-padding: 0 0 5 0;
+}
+
+HBox, VBox {
+    -fx-background-color: #FFFFFF;
+}
+
+#menuBar {
+    -fx-background-color: #FFFFFF;
+}
+
+#rootHBox {
+    -fx-background-color: #C6CED6;
+}
+
+#sidebar {
+    -fx-background-color: #EEEEEE;
+}
+
+Button {
+    -fx-background-color: #02A9EA;
+    -fx-padding: 7 15 7 15;
+
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16px;
+}
+
+.month-year-pane {
+    -fx-background-color: #FFFFFF;
+}
+
+.month-year-pane Button {
+    -fx-background-color: #FFFFFF;
+}
+
+.month-year-pane Button:hover {
+    -fx-background-color: #EEEEEE;
+}
+
+#cancelButton {
+    -fx-background-color: #ea025b;
+    -fx-font-family: "Roboto";
+}
+
+Button:hover, #cancelButton:hover {
+    -fx-background-color: #ff70fd;
+}

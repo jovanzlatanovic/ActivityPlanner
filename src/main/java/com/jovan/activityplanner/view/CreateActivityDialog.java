@@ -33,7 +33,8 @@ public class CreateActivityDialog extends Stage {
 
     private void load() throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("fxml/createActivityView.fxml"));
-        Scene createActivityScene = new Scene(loader.load(), 300, 300);
+        Scene createActivityScene = new Scene(loader.load());
+        createActivityScene.getStylesheets().add(Main.class.getResource("/style.css").toExternalForm());
 
         if (activityIndex > -1) {
             CreateActivityController controller = loader.getController();

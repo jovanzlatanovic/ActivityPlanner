@@ -5,7 +5,9 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
@@ -18,8 +20,16 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         // Initialize logger
         logger.info("FXML Loader loading resource.");
+
+        // Remove window decoration
+        //primaryStage.initStyle(StageStyle.UNDECORATED);
+
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/mainView.fxml"));
         Scene mainScene = new Scene(fxmlLoader.load(), 1000, 600);
+
+        // Css loading
+        mainScene.getStylesheets().add(Main.class.getResource("/style.css").toExternalForm());
+
         logger.info("Main scene loaded.");
 
         // Initialize primary stage

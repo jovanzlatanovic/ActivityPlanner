@@ -8,29 +8,49 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jovan.activityplanner.controller.CreateActivityController">
+<HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jovan.activityplanner.controller.CreateActivityController">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+      <VBox fx:id="createActivityVBox" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
          <children>
-            <Label text="Start date" />
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <DatePicker fx:id="dateStart" />
-                  <TextField fx:id="timeStartText" promptText="HH:mm" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="firstLabel" text="Start date" />
+                        <DatePicker fx:id="dateStart" />
+                        <Label text="End date" />
+                        <DatePicker fx:id="dateEnd" />
+                     </children>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="firstLabel" text="Start time" />
+                        <TextField fx:id="timeStartText" promptText="HH:mm" />
+                        <Label text="End time" />
+                        <TextField fx:id="timeEndText" promptText="HH:mm" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </VBox>
                </children>
             </HBox>
-            <Label text="End date" />
-            <HBox fx:id="date_end" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <DatePicker fx:id="dateEnd" />
-                  <TextField fx:id="timeEndText" promptText="HH:mm" />
-               </children>
-            </HBox>
+            <HBox fx:id="date_end" prefHeight="100.0" prefWidth="200.0" />
             <Label text="Title" />
-            <TextField fx:id="titleText" />
+            <TextField fx:id="titleText">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
             <Label text="Description" />
-            <TextArea fx:id="descriptionText" prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="descriptionText" minHeight="100.0" prefHeight="200.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin></TextArea>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
                <children>
                   <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonClick" text="Create" />

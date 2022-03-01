@@ -42,6 +42,7 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
 
     public MainMenuBar(MainController controller, ApplicationModel appModel) {
         super();
+
         this.controller = controller;
         this.appModel = appModel;
 
