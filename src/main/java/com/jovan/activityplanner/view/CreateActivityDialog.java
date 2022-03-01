@@ -8,6 +8,7 @@ import com.jovan.activityplanner.model.RootActivity;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,6 +22,7 @@ public class CreateActivityDialog extends Stage {
         super();
         load();
         this.setTitle("Create new activity");
+        this.getIcons().add(new Image("dogwalk.png"));
     }
 
     public CreateActivityDialog (ActivityModel model, int activityIndex) throws IOException {

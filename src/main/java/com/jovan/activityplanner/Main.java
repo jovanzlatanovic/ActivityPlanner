@@ -5,9 +5,8 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.text.Font;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
@@ -23,6 +22,9 @@ public class Main extends Application {
 
         // Remove window decoration
         //primaryStage.initStyle(StageStyle.UNDECORATED);
+
+        // Load icon
+        primaryStage.getIcons().add(new Image("icon.png"));
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/mainView.fxml"));
         Scene mainScene = new Scene(fxmlLoader.load(), 1000, 600);

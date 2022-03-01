@@ -9,6 +9,7 @@ import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.command.CreateCommand;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -102,18 +103,8 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
 
         aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setOnAction(e -> {
-            Properties properties = new Properties();
-            try {
-                properties.load(Main.class.getResourceAsStream("/project.properties"));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            Alert aboutDialog = new Alert(Alert.AlertType.INFORMATION);
-            aboutDialog.setTitle("About Activity Planner");
-            aboutDialog.setHeaderText(String.format("Activity Planner %s", properties.getProperty("version")));
-            aboutDialog.setContentText(String.format("Running on Java version: %s\nBuilt using JavaFX 17.0.1\n\nMade by Jovan Zlatanović", System.getProperty("java.version")));
-            aboutDialog.showAndWait();
+            Alert aboutDialog = new AboutDialog();
+            aboutDialog.show();
         });
 
         debugAddItemsMenuItem = new MenuItem("Create dummy activities");
