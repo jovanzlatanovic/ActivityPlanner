@@ -103,7 +103,7 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
 
         aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setOnAction(e -> {
-            Alert aboutDialog = new AboutDialog();
+            Alert aboutDialog = new AboutDialog(this.getScene().getWindow());
             aboutDialog.show();
         });
 
