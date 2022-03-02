@@ -17,6 +17,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -38,7 +39,7 @@ public class TimelineController {
     //private ArrayList<ActivityContainer> activityContainers = new ArrayList<>();
 
     @FXML
-    private HBox rootHBox;
+    private GridPane rootGrid;
 
     public void initialize() {
         logger.info("Initializing timeline controller");
@@ -54,15 +55,15 @@ public class TimelineController {
                 if (change.wasReplaced()) {
                     // undo and edit
                     logger.info("Undo or editchange was detected");
-                    handleActivityModelUndo(change.getFrom(), change.getTo()); // temporary solution for edit, works for now
+                    //handleActivityModelUndo(change.getFrom(), change.getTo()); // temporary solution for edit, works for now
                 } else if (change.wasRemoved()) {
                     // could be undo of first element or deleted activity
                     logger.info("Removal change was detected");
-                    handleActivityModelDeletion(change.getFrom(), change.getTo());
+                    //handleActivityModelDeletion(change.getFrom(), change.getTo());
                 } else if (change.wasAdded()) {
                     // new activity, should add new ActivityContainer to timeline
                     logger.info("Was added change detected");
-                    handleActivityModelAddition(change.getFrom(), change.getTo());
+                    //handleActivityModelAddition(change.getFrom(), change.getTo());
                 }
             }
         });
@@ -114,7 +115,7 @@ public class TimelineController {
 
     public void handleActivityModelUndo(int undoFrom, int undoTo) {
         //undo needs to update everything
-        rootHBox.getChildren().clear();
+        //rootHBox.getChildren().clear();
         int index = 0;
         for (Activity activity : model.getActivityList()) {
             addActivityToView(index, (RootActivity) activity);
@@ -130,7 +131,7 @@ public class TimelineController {
         //activityContainers.removeAll(containersToRemove);
 
         //activityContainers.remove(deletedFrom);
-        rootHBox.getChildren().remove(deletedFrom);
+        //rootHBox.getChildren().remove(deletedFrom);
     }
 
     private ActivityContainer createNewActivityContainer(RootActivity activity) {
@@ -153,7 +154,7 @@ public class TimelineController {
 
     private void addActivityToView(int index, RootActivity activity) {
         ActivityContainer container = createNewActivityContainer(activity);
-        rootHBox.getChildren().add(index, container);
+        //rootHBox.getChildren().add(index, container);
         //activityContainers.add(index, container);
         logger.info("Added activity container to timeline view; index = " + index + ", activity = " + activity);
     }

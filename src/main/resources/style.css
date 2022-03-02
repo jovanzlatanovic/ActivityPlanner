@@ -54,12 +54,20 @@ HBox, VBox {
     -fx-background-color: #FFFFFF;
 }
 
-#rootHBox {
+#rootGrid {
     -fx-background-color: #C6CED6;
+}
+
+#timelineHeader {
+    -fx-background-color: #FFFFFF;
 }
 
 #sidebar {
     -fx-background-color: #EEEEEE;
+}
+
+#scrollPane {
+    -fx-background-color: transparent;
 }
 
 Button {

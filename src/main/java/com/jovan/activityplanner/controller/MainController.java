@@ -45,7 +45,6 @@ public class MainController {
     private Logger logger = LoggerSingleton.getInstance();
 
     //TODO: Switch activity for root activity, check activity model comment
-    //@FXML private ListView<Activity> activityListView;
     private ApplicationModel appModel;
     private ActivityModel model;
 
@@ -65,8 +64,6 @@ public class MainController {
 //                rootBorderPane.getScene().getWindow().setY(dragEvent.getScreenY() - pressEvent.getSceneY());
 //            });
 //        });
-
-        //activityListView.setItems(model.getActivityList());
 
         // Setup commands
         undoCommand = new UndoCommand(appModel, model);
@@ -105,16 +102,6 @@ public class MainController {
     @FXML
     public void onNewActivityButtonClick(ActionEvent event) {
         handleNewActivityDialog(event);
-    }
-
-    @FXML
-    public void onKeyPressedActivityListView(KeyEvent key) {
-        /*if (key.getCode().equals(KeyCode.DELETE)) {
-            int index = activityListView.getSelectionModel().getSelectedIndex();
-            if (index > -1) {
-                handleDeleteActivity(index);
-            }
-        }*/
     }
 
     public void handleOpenBrowser(String url) {
