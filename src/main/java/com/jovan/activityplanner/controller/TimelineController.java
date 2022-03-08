@@ -25,6 +25,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -52,15 +56,16 @@ public class TimelineController {
         model = ActivityModel.getInstance();
 
         // Setup times from midnight in gridview
-        String time = "00:00";
+        LocalTime time = LocalTime.of(0, 0);
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("HH:mm");
         for (int i = 1; i <= 48; i++) {
-            Label label = new Label(time);
+            Label label = new Label(pattern.format(time));
             RowConstraints row = new RowConstraints(30);
             rootGrid.getRowConstraints().add(row);
             rootGrid.add(label, 0, i);
 
+            time = time.plus(30, ChronoUnit.MINUTES);
         }
-
 
         // Setup activity model listener
         model.getActivityList().addListener((ListChangeListener<? super Activity>) change -> {
