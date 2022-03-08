@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -40,6 +41,8 @@ public class TimelineController {
 
     @FXML
     private GridPane rootGrid;
+    @FXML
+    private ScrollPane scrollPane;
 
     public void initialize() {
         logger.info("Initializing timeline controller");
@@ -47,6 +50,17 @@ public class TimelineController {
         // Get models
         appModel = ApplicationModel.getInstance();
         model = ActivityModel.getInstance();
+
+        // Setup times from midnight in gridview
+        String time = "00:00";
+        for (int i = 1; i <= 48; i++) {
+            Label label = new Label(time);
+            RowConstraints row = new RowConstraints(30);
+            rootGrid.getRowConstraints().add(row);
+            rootGrid.add(label, 0, i);
+
+        }
+
 
         // Setup activity model listener
         model.getActivityList().addListener((ListChangeListener<? super Activity>) change -> {
@@ -63,7 +77,7 @@ public class TimelineController {
                 } else if (change.wasAdded()) {
                     // new activity, should add new ActivityContainer to timeline
                     logger.info("Was added change detected");
-                    //handleActivityModelAddition(change.getFrom(), change.getTo());
+                    handleActivityModelAddition(change.getFrom(), change.getTo());
                 }
             }
         });

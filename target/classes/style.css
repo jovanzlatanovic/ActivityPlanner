@@ -55,7 +55,7 @@ HBox, VBox {
 }
 
 #rootGrid {
-    -fx-background-color: #C6CED6;
+    -fx-background-color: #e1e6eb;
 }
 
 #timelineHeader {
@@ -68,6 +68,23 @@ HBox, VBox {
 
 #scrollPane {
     -fx-background-color: transparent;
+}
+
+#label_dateRange {
+    -fx-font-size: 20px;
+}
+
+GridPane {
+    -fx-grid-lines-visible: true;
+    -fx-background-color: #C6CED6;
+}
+
+GridPane Line {
+    -fx-stroke: white;
+}
+
+GridPane Label {
+    -fx-font-size: 16px;
 }
 
 Button {

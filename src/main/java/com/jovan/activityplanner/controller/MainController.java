@@ -24,10 +24,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -80,7 +77,7 @@ public class MainController {
         logger.info("Loading timeline view");
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/timelineView.fxml"));
         try {
-            ScrollPane timelineView = fxmlLoader.load();
+            AnchorPane timelineView = fxmlLoader.load();
 
             timelineAnchor.getChildren().add(timelineView);
 
