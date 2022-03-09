@@ -7,14 +7,22 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.math.BigDecimal;
+
 public class ActivityContainer extends TitledPane {
     private RootActivity activity;
 
     public ActivityContainer(RootActivity activity, VBox infoContainer, ContextMenu contextMenu) {
         super(activity.getTitle(), infoContainer);
-        this.setMinWidth(USE_PREF_SIZE);
+        this.setMinWidth(0);
         this.setMinHeight(USE_PREF_SIZE);
+
         this.setPrefWidth(180);
+
+        double d_endTime = (double)activity.getEndTime().getHour() + ((double)activity.getEndTime().getMinute() / 60.0);
+        double d_startTime = (double)activity.getStartTime().getHour() + ((double)activity.getStartTime().getMinute() / 60.0);
+        double decimalHourDifference = new BigDecimal(d_endTime).subtract(new BigDecimal(d_startTime)).doubleValue();
+        this.setPrefHeight(decimalHourDifference * 50);
 
         // Setting activity and context menu
         this.activity = activity;

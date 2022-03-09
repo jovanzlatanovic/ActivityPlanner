@@ -16,6 +16,8 @@ import javafx.animation.TranslateTransition;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -58,13 +60,16 @@ public class TimelineController {
         // Setup times from midnight in gridview
         LocalTime time = LocalTime.of(0, 0);
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("HH:mm");
-        for (int i = 1; i <= 48; i++) {
+        for (int i = 1; i <= 24; i++) {
             Label label = new Label(pattern.format(time));
-            RowConstraints row = new RowConstraints(30);
+
+            RowConstraints row = new RowConstraints(50);
+            row.setValignment(VPos.TOP);
+
             rootGrid.getRowConstraints().add(row);
             rootGrid.add(label, 0, i);
 
-            time = time.plus(30, ChronoUnit.MINUTES);
+            time = time.plus(1, ChronoUnit.HOURS);
         }
 
         // Setup activity model listener
@@ -173,8 +178,19 @@ public class TimelineController {
 
     private void addActivityToView(int index, RootActivity activity) {
         ActivityContainer container = createNewActivityContainer(activity);
-        //rootHBox.getChildren().add(index, container);
-        //activityContainers.add(index, container);
+
+        // decide by time to which row to add
+        /*int counter = 1;
+        for (Node node : rootGrid.getChildren()) {
+            Label label = (Label) node;
+            if (GridPane.getColumnIndex(node) == 0 && label.getText() == activity.getStartTime().toLocalTime().toString()) {
+                rootGrid.add(container, 1, counter);
+                break;
+            }
+            counter += 1;
+        }*/
+        rootGrid.add(container, 1, 1);
+
         logger.info("Added activity container to timeline view; index = " + index + ", activity = " + activity);
     }
 }
