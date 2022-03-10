@@ -7,6 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -124,5 +127,23 @@ public class ActivityModel {
             }
         }
         return index;
+    }
+
+    public List<Activity> getActivitiesFromWeek(LocalDate mondayOfWeek) {
+        LocalDate sundayOfWeek = LocalDate.from(mondayOfWeek).plus(6, ChronoUnit.DAYS);
+        List<Activity> activitiesOfWeek = new ArrayList<>();
+
+        // get activities contained within (inclusive) monday and sunday of the selected week
+        for (Activity activity : activityList) {
+            if (activity.getStartTime().toLocalDate().compareTo(mondayOfWeek) >= 0) {
+                if (activity.getEndTime().toLocalDate().compareTo(sundayOfWeek) <= 0) {
+                    activitiesOfWeek.add(activity);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return activitiesOfWeek;
     }
 }
