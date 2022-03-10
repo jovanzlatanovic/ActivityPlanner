@@ -33,6 +33,8 @@ public class TimelineController {
     private LocalDate selectedWeek;
 
     @FXML
+    private GridPane dayOfWeekGrid;
+    @FXML
     private GridPane rootGrid;
     @FXML
     private ScrollPane scrollPane;
@@ -80,6 +82,8 @@ public class TimelineController {
     }
 
     private void clearTimeline() {
+        dayOfWeekGrid.getChildren().clear();
+        dayOfWeekGrid.getRowConstraints().clear();
         rootGrid.getChildren().clear();
         rootGrid.getRowConstraints().clear();
     }
@@ -119,16 +123,16 @@ public class TimelineController {
         // Setup gridview date of week
         RowConstraints dateRow = new RowConstraints(25);
         dateRow.setValignment(VPos.CENTER);
-        rootGrid.getRowConstraints().add(dateRow);
-        rootGrid.getRowConstraints().add(dateRow);
+        dayOfWeekGrid.getRowConstraints().add(dateRow);
+        dayOfWeekGrid.getRowConstraints().add(dateRow);
 
-        rootGrid.add(mondayNameText, 1, 0);
-        rootGrid.add(tuesdayNameText, 2, 0);
-        rootGrid.add(wednesdayNameText, 3, 0);
-        rootGrid.add(thursdayNameText, 4, 0);
-        rootGrid.add(fridayNameText, 5, 0);
-        rootGrid.add(saturdayNameText, 6, 0);
-        rootGrid.add(sundayNameText, 7, 0);
+        dayOfWeekGrid.add(mondayNameText, 1, 0);
+        dayOfWeekGrid.add(tuesdayNameText, 2, 0);
+        dayOfWeekGrid.add(wednesdayNameText, 3, 0);
+        dayOfWeekGrid.add(thursdayNameText, 4, 0);
+        dayOfWeekGrid.add(fridayNameText, 5, 0);
+        dayOfWeekGrid.add(saturdayNameText, 6, 0);
+        dayOfWeekGrid.add(sundayNameText, 7, 0);
 
         GridPane.setHalignment(mondayNameText, HPos.CENTER);
         GridPane.setHalignment(tuesdayNameText, HPos.CENTER);
@@ -138,13 +142,13 @@ public class TimelineController {
         GridPane.setHalignment(saturdayNameText, HPos.CENTER);
         GridPane.setHalignment(sundayNameText, HPos.CENTER);
 
-        rootGrid.add(mondayText, 1, 1);
-        rootGrid.add(tuesdayText, 2, 1);
-        rootGrid.add(wednesdayText, 3, 1);
-        rootGrid.add(thursdayText, 4, 1);
-        rootGrid.add(fridayText, 5, 1);
-        rootGrid.add(saturdayText, 6, 1);
-        rootGrid.add(sundayText, 7, 1);
+        dayOfWeekGrid.add(mondayText, 1, 1);
+        dayOfWeekGrid.add(tuesdayText, 2, 1);
+        dayOfWeekGrid.add(wednesdayText, 3, 1);
+        dayOfWeekGrid.add(thursdayText, 4, 1);
+        dayOfWeekGrid.add(fridayText, 5, 1);
+        dayOfWeekGrid.add(saturdayText, 6, 1);
+        dayOfWeekGrid.add(sundayText, 7, 1);
 
         GridPane.setHalignment(mondayText, HPos.CENTER);
         GridPane.setHalignment(tuesdayText, HPos.CENTER);
@@ -157,7 +161,7 @@ public class TimelineController {
         // Setup times from midnight in gridview
         LocalTime time = LocalTime.of(0, 0);
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("HH:mm");
-        for (int i = 2; i <= 25; i++) {
+        for (int i = 0; i <= 23; i++) {
             Label label = new Label(pattern.format(time));
 
             RowConstraints row = new RowConstraints(50);
@@ -272,7 +276,7 @@ public class TimelineController {
         LocalTime timeBefore = LocalTime.of(0, 0);
         LocalTime timeAfter = LocalTime.of(1, 0);
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("HH:mm");
-        for (int i = 2; i <= 25; i++) {
+        for (int i = 0; i <= 23; i++) {
             if ((activity.getStartTime().toLocalTime().isBefore(timeAfter) && activity.getStartTime().toLocalTime().isAfter(timeBefore) ) || timeBefore.compareTo(activity.getStartTime().toLocalTime()) == 0) {
                 rootGrid.add(container, columnIndex, i);
                 break;
