@@ -1,72 +1,16 @@
 [
   {
     "id": "root_activity-0",
-    "startTime": "2022-03-01T14:42:56.440886600",
-    "endTime": "2022-03-01T15:42:56.440886600",
-    "title": "Debug 0",
-    "description": "This is a text for debugging and spamming activities."
+    "startTime": "2022-03-07T05:00",
+    "endTime": "2022-03-08T06:00",
+    "title": "test",
+    "description": ""
   },
   {
     "id": "root_activity-1",
-    "startTime": "2022-03-01T14:42:56.447887800",
-    "endTime": "2022-03-01T15:42:56.447887800",
-    "title": "Debug 1",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-2",
-    "startTime": "2022-03-01T14:42:56.449888500",
-    "endTime": "2022-03-01T15:42:56.449888500",
-    "title": "Debug 2",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-3",
-    "startTime": "2022-03-01T14:42:56.450889",
-    "endTime": "2022-03-01T15:42:56.450889",
-    "title": "Debug 3",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-4",
-    "startTime": "2022-03-01T14:42:56.451889200",
-    "endTime": "2022-03-01T15:42:56.451889200",
-    "title": "Debug 4",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-5",
-    "startTime": "2022-03-01T14:42:56.452888800",
-    "endTime": "2022-03-01T15:42:56.452888800",
-    "title": "Debug 5",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-6",
-    "startTime": "2022-03-01T14:42:56.454890100",
-    "endTime": "2022-03-01T15:42:56.454890100",
-    "title": "Debug 6",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-7",
-    "startTime": "2022-03-01T14:42:56.455889300",
-    "endTime": "2022-03-01T15:42:56.455889300",
-    "title": "Debug 7",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-8",
-    "startTime": "2022-03-01T14:42:56.456889600",
-    "endTime": "2022-03-01T15:42:56.456889600",
-    "title": "Debug 8",
-    "description": "This is a text for debugging and spamming activities."
-  },
-  {
-    "id": "root_activity-9",
-    "startTime": "2022-03-01T14:42:56.458889500",
-    "endTime": "2022-03-01T15:42:56.458889500",
-    "title": "Debug 9",
-    "description": "This is a text for debugging and spamming activities."
+    "startTime": "2022-03-08T04:00",
+    "endTime": "2022-03-10T05:30",
+    "title": "another test",
+    "description": "with a description"
   }
 ]
