@@ -11,6 +11,8 @@
     Error pink: #ea025b
 */
 
+/* Text and fonts */
+
 @font-face {
     font-family: 'Roboto';
     src: url('/Roboto-Regular.ttf');
@@ -34,6 +36,8 @@
     -fx-font-family: "Roboto";
     -fx-font-size: 14px;
 }
+
+/* Rectangles and labels */
 
 #createActivityVBox Label {
     -fx-text-fill: #6d7175;
@@ -66,15 +70,7 @@ HBox, VBox {
     -fx-background-color: #EEEEEE;
 }
 
-/* Buttons */
-
-Button {
-    -fx-background-color: #02A9EA;
-    -fx-padding: 7 15 7 15;
-
-    -fx-text-fill: #FFFFFF;
-    -fx-font-size: 16px;
-}
+/* Calendar selector */
 
 .month-year-pane {
     -fx-background-color: #FFFFFF;
@@ -88,6 +84,16 @@ Button {
     -fx-background-color: #EEEEEE;
 }
 
+/* Buttons */
+
+Button {
+    -fx-background-color: #02A9EA;
+    -fx-padding: 7 15 7 15;
+
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16px;
+}
+
 #cancelButton {
     -fx-background-color: #ea025b;
     -fx-font-family: "Roboto";
@@ -95,6 +101,10 @@ Button {
 
 Button:hover, #cancelButton:hover {
     -fx-background-color: #ff70fd;
+}
+
+Button:pressed, #cancelButton:pressed {
+    -fx-background-color: #f522f1;
 }
 
 /* Timeline */
@@ -123,4 +133,10 @@ GridPane Line {
 
 GridPane Label {
     -fx-font-size: 16px;
+}
+
+/* Activity container */
+
+.titled-pane > *.content  {
+    -fx-font-size: 8px;
 }

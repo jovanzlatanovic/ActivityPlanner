@@ -35,7 +35,11 @@ public class ActivityContainer extends TitledPane {
 
         description.setWrapText(true);
 
-        infoContainer.getChildren().addAll(startTime, endTime, description);
+        infoContainer.getChildren().addAll(description);
+    }
+
+    public void setOnClick() {
+
     }
 
     public RootActivity getActivity() {
