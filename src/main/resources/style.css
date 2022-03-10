@@ -66,26 +66,7 @@ HBox, VBox {
     -fx-background-color: #EEEEEE;
 }
 
-#scrollPane {
-    -fx-background-color: transparent;
-}
-
-#label_dateRange {
-    -fx-font-size: 20px;
-}
-
-GridPane {
-    -fx-grid-lines-visible: true;
-    -fx-background-color: #C6CED6;
-}
-
-GridPane Line {
-    -fx-stroke: white;
-}
-
-GridPane Label {
-    -fx-font-size: 16px;
-}
+/* Buttons */
 
 Button {
     -fx-background-color: #02A9EA;
@@ -114,4 +95,32 @@ Button {
 
 Button:hover, #cancelButton:hover {
     -fx-background-color: #ff70fd;
+}
+
+/* Timeline */
+
+#timelineHeader Button {
+    -fx-font-size: 14px;
+    -fx-padding: 3 10 3 10;
+}
+
+#scrollPane {
+    -fx-background-color: transparent;
+}
+
+#label_dateRange {
+    -fx-font-size: 16px;
+}
+
+GridPane {
+    -fx-background-color: #C6CED6;
+    -fx-background-color: transparent;
+}
+
+GridPane Line {
+    -fx-stroke: white;
+}
+
+GridPane Label {
+    -fx-font-size: 16px;
 }
