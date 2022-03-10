@@ -16,7 +16,9 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Properties;
 
 public class MainMenuBar extends MenuBar implements CommandHistoryListener {
@@ -109,8 +111,12 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
 
         debugAddItemsMenuItem = new MenuItem("Create dummy activities");
         debugAddItemsMenuItem.setOnAction(e -> {
-            for (int i = 0; i < 10; i++) {
-                RootActivity newActivity = new RootActivity(this.model_forDebug.getUniqueId(), LocalDateTime.now(), LocalDateTime.now().plusHours(1), "Debug " + String.valueOf(i), "This is a text for debugging and spamming activities.");
+            LocalDate date = LocalDate.now();
+            LocalTime time = LocalTime.of(3, 0);
+            for (int i = 0; i < 5; i++) {
+                RootActivity newActivity = new RootActivity(this.model_forDebug.getUniqueId(), LocalDateTime.of(date, time), LocalDateTime.of(date, time).plusHours(2), "Debug " + String.valueOf(i), "This is a text for debugging and spamming activities.");
+
+                time = time.plusHours(3);
 
                 CreateCommand c = new CreateCommand(appModel, model_forDebug);
                 c.setActivityToCreate(newActivity);
