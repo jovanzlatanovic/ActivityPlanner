@@ -22,7 +22,7 @@ public class ActivityContainer extends TitledPane {
         double d_endTime = (double)activity.getEndTime().getHour() + ((double)activity.getEndTime().getMinute() / 60.0);
         double d_startTime = (double)activity.getStartTime().getHour() + ((double)activity.getStartTime().getMinute() / 60.0);
         double decimalHourDifference = new BigDecimal(d_endTime).subtract(new BigDecimal(d_startTime)).doubleValue();
-        this.setPrefHeight(decimalHourDifference * 50);
+        this.setPrefHeight(decimalHourDifference < 1 ? 50 : decimalHourDifference * 50);
 
         // Setting activity and context menu
         this.activity = activity;

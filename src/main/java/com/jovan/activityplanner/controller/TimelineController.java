@@ -179,17 +179,19 @@ public class TimelineController {
     private void addActivityToView(int index, RootActivity activity) {
         ActivityContainer container = createNewActivityContainer(activity);
 
-        // decide by time to which row to add
-        /*int counter = 1;
-        for (Node node : rootGrid.getChildren()) {
-            Label label = (Label) node;
-            if (GridPane.getColumnIndex(node) == 0 && label.getText() == activity.getStartTime().toLocalTime().toString()) {
-                rootGrid.add(container, 1, counter);
+        // If time of activity is after timeBefore (inclusive), place the container in the index of timeBefore
+        LocalTime timeBefore = LocalTime.of(0, 0);
+        LocalTime timeAfter = LocalTime.of(1, 0);
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("HH:mm");
+        for (int i = 1; i <= 24; i++) {
+            if ((activity.getStartTime().toLocalTime().isBefore(timeAfter) && activity.getStartTime().toLocalTime().isAfter(timeBefore) ) || timeBefore.compareTo(activity.getStartTime().toLocalTime()) == 0) {
+                rootGrid.add(container, 1, i);
                 break;
             }
-            counter += 1;
-        }*/
-        rootGrid.add(container, 1, 1);
+
+            timeBefore = timeBefore.plus(1, ChronoUnit.HOURS);
+            timeAfter = timeAfter.plus(1, ChronoUnit.HOURS);
+        }
 
         logger.info("Added activity container to timeline view; index = " + index + ", activity = " + activity);
     }
