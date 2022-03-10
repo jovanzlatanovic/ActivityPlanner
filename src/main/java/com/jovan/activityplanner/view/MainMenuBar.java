@@ -9,13 +9,16 @@ import com.jovan.activityplanner.model.command.Command;
 import com.jovan.activityplanner.model.command.CreateCommand;
 import com.jovan.activityplanner.model.listener.CommandHistoryListener;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Properties;
 
 public class MainMenuBar extends MenuBar implements CommandHistoryListener {
@@ -42,6 +45,7 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
 
     public MainMenuBar(MainController controller, ApplicationModel appModel) {
         super();
+
         this.controller = controller;
         this.appModel = appModel;
 
@@ -101,24 +105,18 @@ public class MainMenuBar extends MenuBar implements CommandHistoryListener {
 
         aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setOnAction(e -> {
-            Properties properties = new Properties();
-            try {
-                properties.load(Main.class.getResourceAsStream("/project.properties"));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            Alert aboutDialog = new Alert(Alert.AlertType.INFORMATION);
-            aboutDialog.setTitle("About Activity Planner");
-            aboutDialog.setHeaderText(String.format("Activity Planner %s", properties.getProperty("version")));
-            aboutDialog.setContentText(String.format("Running on Java version: %s\nBuilt using JavaFX 17.0.1\n\nMade by Jovan Zlatanović", System.getProperty("java.version")));
-            aboutDialog.showAndWait();
+            Alert aboutDialog = new AboutDialog(this.getScene().getWindow());
+            aboutDialog.show();
         });
 
         debugAddItemsMenuItem = new MenuItem("Create dummy activities");
         debugAddItemsMenuItem.setOnAction(e -> {
-            for (int i = 0; i < 10; i++) {
-                RootActivity newActivity = new RootActivity(this.model_forDebug.getUniqueId(), LocalDateTime.now(), LocalDateTime.now().plusHours(1), "Debug " + String.valueOf(i), "This is a text for debugging and spamming activities.");
+            LocalDate date = LocalDate.now();
+            LocalTime time = LocalTime.of(3, 0);
+            for (int i = 0; i < 5; i++) {
+                RootActivity newActivity = new RootActivity(this.model_forDebug.getUniqueId(), LocalDateTime.of(date, time), LocalDateTime.of(date, time).plusHours(2), "Debug " + String.valueOf(i), "This is a text for debugging and spamming activities.");
+
+                time = time.plusHours(3);
 
                 CreateCommand c = new CreateCommand(appModel, model_forDebug);
                 c.setActivityToCreate(newActivity);

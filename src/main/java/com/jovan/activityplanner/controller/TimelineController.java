@@ -5,40 +5,41 @@ import com.jovan.activityplanner.model.ActivityModel;
 import com.jovan.activityplanner.model.ApplicationModel;
 import com.jovan.activityplanner.model.RootActivity;
 import com.jovan.activityplanner.model.command.DeleteCommand;
-import com.jovan.activityplanner.model.filemanager.AbstractFileLoader;
-import com.jovan.activityplanner.model.filemanager.ActivityLoader;
-import com.jovan.activityplanner.model.filemanager.LocalFileSystem;
 import com.jovan.activityplanner.util.LoggerSingleton;
 import com.jovan.activityplanner.view.ActivityContainer;
 import com.jovan.activityplanner.view.CreateActivityDialog;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class TimelineController {
     private Logger logger = LoggerSingleton.getInstance();
     private ApplicationModel appModel;
     private ActivityModel model;
 
-    //private ArrayList<ActivityContainer> activityContainers = new ArrayList<>();
+    private LocalDate selectedWeek;
 
     @FXML
-    private HBox rootHBox;
+    private GridPane dayOfWeekGrid;
+    @FXML
+    private GridPane rootGrid;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private Label label_dateRange;
 
     public void initialize() {
         logger.info("Initializing timeline controller");
@@ -46,6 +47,10 @@ public class TimelineController {
         // Get models
         appModel = ApplicationModel.getInstance();
         model = ActivityModel.getInstance();
+
+        // Setup the week date range
+        selectedWeek = getMondayOfCurrentWeek();
+        refreshTimeline();
 
         // Setup activity model listener
         model.getActivityList().addListener((ListChangeListener<? super Activity>) change -> {
@@ -67,23 +72,137 @@ public class TimelineController {
             }
         });
 
-        /*TranslateTransition translate = new TranslateTransition();
-        translate.setNode(rectangleBlue);
-        translate.setDuration(Duration.millis(1000));
-        translate.setCycleCount(2);
-        translate.setByX(250);
-        translate.setByY(250);
-        translate.setAutoReverse(true);
-        translate.play();
-
-        RotateTransition rotate = new RotateTransition();
-        rotate.setNode(rectangleBlue);
-        rotate.setDuration(Duration.millis(2000));
-        rotate.setCycleCount(3);
-        rotate.setByAngle(360);
-        rotate.play();*/
-
         logger.info("Timeline controller initialized");
+    }
+
+    private void refreshTimeline() {
+        clearTimeline();
+        loadWeekToTimeline(selectedWeek);
+        loadCurrentWeekActivities();
+    }
+
+    private void clearTimeline() {
+        dayOfWeekGrid.getChildren().clear();
+        dayOfWeekGrid.getRowConstraints().clear();
+        rootGrid.getChildren().clear();
+        rootGrid.getRowConstraints().clear();
+    }
+
+    private void loadWeekToTimeline(LocalDate mondayDate) {
+        DateTimeFormatter weekDatePattern = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+        DateTimeFormatter weekDayPattern = DateTimeFormatter.ofPattern("dd / MM");
+
+        label_dateRange.setText(weekDatePattern.format(mondayDate));
+
+        // Setup day name labels
+        Label mondayNameText = new Label("Monday");
+        Label tuesdayNameText = new Label("Tuesday");
+        Label wednesdayNameText = new Label("Wednesday");
+        Label thursdayNameText = new Label("Thursday");
+        Label fridayNameText = new Label("Friday");
+        Label saturdayNameText = new Label("Saturday");
+        Label sundayNameText = new Label("Sunday");
+
+        // Setup date labels
+        Label mondayText = new Label(weekDayPattern.format(mondayDate));
+        mondayDate = mondayDate.plus(1, ChronoUnit.DAYS);
+        Label tuesdayText = new Label(weekDayPattern.format(mondayDate));
+        mondayDate = mondayDate.plus(1, ChronoUnit.DAYS);
+        Label wednesdayText = new Label(weekDayPattern.format(mondayDate));
+        mondayDate = mondayDate.plus(1, ChronoUnit.DAYS);
+        Label thursdayText = new Label(weekDayPattern.format(mondayDate));
+        mondayDate = mondayDate.plus(1, ChronoUnit.DAYS);
+        Label fridayText = new Label(weekDayPattern.format(mondayDate));
+        mondayDate = mondayDate.plus(1, ChronoUnit.DAYS);
+        Label saturdayText = new Label(weekDayPattern.format(mondayDate));
+        mondayDate = mondayDate.plus(1, ChronoUnit.DAYS);
+        Label sundayText = new Label(weekDayPattern.format(mondayDate));
+
+        label_dateRange.setText(label_dateRange.getText() + " - " + weekDatePattern.format(mondayDate));
+
+        // Setup gridview date of week
+        RowConstraints dateRow = new RowConstraints(25);
+        dateRow.setValignment(VPos.CENTER);
+        dayOfWeekGrid.getRowConstraints().add(dateRow);
+        dayOfWeekGrid.getRowConstraints().add(dateRow);
+
+        dayOfWeekGrid.add(mondayNameText, 1, 0);
+        dayOfWeekGrid.add(tuesdayNameText, 2, 0);
+        dayOfWeekGrid.add(wednesdayNameText, 3, 0);
+        dayOfWeekGrid.add(thursdayNameText, 4, 0);
+        dayOfWeekGrid.add(fridayNameText, 5, 0);
+        dayOfWeekGrid.add(saturdayNameText, 6, 0);
+        dayOfWeekGrid.add(sundayNameText, 7, 0);
+
+        GridPane.setHalignment(mondayNameText, HPos.CENTER);
+        GridPane.setHalignment(tuesdayNameText, HPos.CENTER);
+        GridPane.setHalignment(wednesdayNameText, HPos.CENTER);
+        GridPane.setHalignment(thursdayNameText, HPos.CENTER);
+        GridPane.setHalignment(fridayNameText, HPos.CENTER);
+        GridPane.setHalignment(saturdayNameText, HPos.CENTER);
+        GridPane.setHalignment(sundayNameText, HPos.CENTER);
+
+        dayOfWeekGrid.add(mondayText, 1, 1);
+        dayOfWeekGrid.add(tuesdayText, 2, 1);
+        dayOfWeekGrid.add(wednesdayText, 3, 1);
+        dayOfWeekGrid.add(thursdayText, 4, 1);
+        dayOfWeekGrid.add(fridayText, 5, 1);
+        dayOfWeekGrid.add(saturdayText, 6, 1);
+        dayOfWeekGrid.add(sundayText, 7, 1);
+
+        GridPane.setHalignment(mondayText, HPos.CENTER);
+        GridPane.setHalignment(tuesdayText, HPos.CENTER);
+        GridPane.setHalignment(wednesdayText, HPos.CENTER);
+        GridPane.setHalignment(thursdayText, HPos.CENTER);
+        GridPane.setHalignment(fridayText, HPos.CENTER);
+        GridPane.setHalignment(saturdayText, HPos.CENTER);
+        GridPane.setHalignment(sundayText, HPos.CENTER);
+
+        // Setup times from midnight in gridview
+        LocalTime time = LocalTime.of(0, 0);
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("HH:mm");
+        for (int i = 0; i <= 23; i++) {
+            Label label = new Label(pattern.format(time));
+
+            RowConstraints row = new RowConstraints(50);
+            row.setValignment(VPos.TOP);
+
+            rootGrid.getRowConstraints().add(row);
+            rootGrid.add(label, 0, i);
+
+            time = time.plus(1, ChronoUnit.HOURS);
+        }
+    }
+
+    private void loadCurrentWeekActivities() {
+        for (Activity activity : model.getActivitiesFromWeek(selectedWeek)) {
+            addActivityToView((RootActivity) activity);
+        }
+    }
+
+    private LocalDate getMondayOfCurrentWeek() {
+        Calendar c = Calendar.getInstance();
+        c.setFirstDayOfWeek(Calendar.MONDAY);
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        return LocalDateTime.ofInstant(c.toInstant(), c.getTimeZone().toZoneId()).toLocalDate();
+    }
+
+    @FXML
+    private void handleWeekLeftButton() {
+        selectedWeek = selectedWeek.minus(1, ChronoUnit.WEEKS);
+        refreshTimeline();
+    }
+
+    @FXML
+    private void handleWeekRightButton() {
+        selectedWeek = selectedWeek.plus(1, ChronoUnit.WEEKS);
+        refreshTimeline();
+    }
+
+    @FXML
+    private void handleCurrentWeekButton() {
+        selectedWeek = getMondayOfCurrentWeek();
+        refreshTimeline();
     }
 
     private void handleDeleteActivity(Activity activityToDelete) {
@@ -108,29 +227,25 @@ public class TimelineController {
 
     public void handleActivityModelAddition(int fromIndex, int toIndex) {
         for (int i = fromIndex; i < toIndex; i++) {
-            addActivityToView(i, (RootActivity) model.getActivity(i));
+            addActivityToView((RootActivity) model.getActivity(i));
         }
     }
 
     public void handleActivityModelUndo(int undoFrom, int undoTo) {
-        //undo needs to update everything
-        rootHBox.getChildren().clear();
-        int index = 0;
-        for (Activity activity : model.getActivityList()) {
-            addActivityToView(index, (RootActivity) activity);
-            index += 1;
-        }
+        refreshTimeline();
     }
 
     public void handleActivityModelDeletion(int deletedFrom, int deletedTo) {
-        // todo: deletedTo ignored for now
+        //todo: potentially refactor to not refresh the whole weekly timeline for a single change, same goes for undo handler
+        refreshTimeline();
 
+        //rootGrid.getChildren().re
         // Sublist throws ConcurrentModificationException when removeall is used directly after sublist:
         // List<ActivityContainer> containersToRemove = activityContainers.subList(deletedFrom, deletedTo + 1);
         //activityContainers.removeAll(containersToRemove);
 
         //activityContainers.remove(deletedFrom);
-        rootHBox.getChildren().remove(deletedFrom);
+        //rootHBox.getChildren().remove(deletedFrom);
     }
 
     private ActivityContainer createNewActivityContainer(RootActivity activity) {
@@ -151,10 +266,26 @@ public class TimelineController {
         return new ActivityContainer(activity, new VBox(), contextMenu);
     }
 
-    private void addActivityToView(int index, RootActivity activity) {
+    private void addActivityToView(RootActivity activity) {
         ActivityContainer container = createNewActivityContainer(activity);
-        rootHBox.getChildren().add(index, container);
-        //activityContainers.add(index, container);
-        logger.info("Added activity container to timeline view; index = " + index + ", activity = " + activity);
+
+        // Check at which day of the week the start date is
+        int columnIndex = 1 + Period.between(selectedWeek, activity.getStartTime().toLocalDate()).getDays();
+
+        // If time of activity is after timeBefore (inclusive), place the container in the index of timeBefore
+        LocalTime timeBefore = LocalTime.of(0, 0);
+        LocalTime timeAfter = LocalTime.of(1, 0);
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("HH:mm");
+        for (int i = 0; i <= 23; i++) {
+            if ((activity.getStartTime().toLocalTime().isBefore(timeAfter) && activity.getStartTime().toLocalTime().isAfter(timeBefore) ) || timeBefore.compareTo(activity.getStartTime().toLocalTime()) == 0) {
+                rootGrid.add(container, columnIndex, i);
+                break;
+            }
+
+            timeBefore = timeBefore.plus(1, ChronoUnit.HOURS);
+            timeAfter = timeAfter.plus(1, ChronoUnit.HOURS);
+        }
+
+        logger.info("Added activity container to timeline view; activity = " + activity);
     }
 }

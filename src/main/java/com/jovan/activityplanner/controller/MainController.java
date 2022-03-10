@@ -24,10 +24,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -45,7 +42,6 @@ public class MainController {
     private Logger logger = LoggerSingleton.getInstance();
 
     //TODO: Switch activity for root activity, check activity model comment
-    //@FXML private ListView<Activity> activityListView;
     private ApplicationModel appModel;
     private ActivityModel model;
 
@@ -58,14 +54,22 @@ public class MainController {
         this.model = ActivityModel.getInstance();
         this.appModel = ApplicationModel.getInstance();
 
-        //activityListView.setItems(model.getActivityList());
+        // Set click and drag for window
+//        rootBorderPane.setOnMousePressed(pressEvent -> {
+//            rootBorderPane.setOnMouseDragged(dragEvent -> {
+//                rootBorderPane.getScene().getWindow().setX(dragEvent.getScreenX() - pressEvent.getSceneX());
+//                rootBorderPane.getScene().getWindow().setY(dragEvent.getScreenY() - pressEvent.getSceneY());
+//            });
+//        });
 
         // Setup commands
         undoCommand = new UndoCommand(appModel, model);
         redoCommand = new RedoCommand(appModel, model);
 
         // Menu bar initialization
-        menuBar = new MainMenuBar(this, appModel);
+        MenuBar newMenuBar = new MainMenuBar(this, appModel);
+        newMenuBar.setId(menuBar.getId());
+        menuBar = newMenuBar;
         appModel.addHistoryListener((CommandHistoryListener) menuBar);
         rootBorderPane.setTop(menuBar);
 
@@ -73,7 +77,8 @@ public class MainController {
         logger.info("Loading timeline view");
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/timelineView.fxml"));
         try {
-            ScrollPane timelineView = fxmlLoader.load();
+            AnchorPane timelineView = fxmlLoader.load();
+
             timelineAnchor.getChildren().add(timelineView);
 
             AnchorPane.setTopAnchor(timelineView, 0.0);
@@ -94,16 +99,6 @@ public class MainController {
     @FXML
     public void onNewActivityButtonClick(ActionEvent event) {
         handleNewActivityDialog(event);
-    }
-
-    @FXML
-    public void onKeyPressedActivityListView(KeyEvent key) {
-        /*if (key.getCode().equals(KeyCode.DELETE)) {
-            int index = activityListView.getSelectionModel().getSelectedIndex();
-            if (index > -1) {
-                handleDeleteActivity(index);
-            }
-        }*/
     }
 
     public void handleOpenBrowser(String url) {
