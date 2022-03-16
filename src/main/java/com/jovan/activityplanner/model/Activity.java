@@ -79,7 +79,7 @@ public class Activity {
             return true;
         }
 
-        return false;
+        throw new IllegalArgumentException("Cannot create activity. Start time must be before end time.");
     }
 
     public String getTitle() {
